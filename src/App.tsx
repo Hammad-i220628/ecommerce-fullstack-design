@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search, User, Heart, ShoppingCart, Menu, ChevronDown, Star, MapPin, Truck, Shield, Eye, MessageSquare } from 'lucide-react';
+import FlagIcon from './components/FlagIcon';
 
 function App() {
   const [selectedCategory, setSelectedCategory] = useState('All category');
@@ -69,16 +70,16 @@ function App() {
   ];
 
   const suppliers = [
-    { country: 'Arabic Emirates', flag: '🇦🇪', name: 'shopname.ae' },
+    { country: 'United Arab Emirates', flag: '🇦🇪', name: 'shopname.ae' },
     { country: 'Australia', flag: '🇦🇺', name: 'shopname.au' },
-    { country: 'United States', flag: '🇺🇸', name: 'shopname.us' },
-    { country: 'Russia', flag: '🇷🇺', name: 'shopname.ru' },
-    { country: 'Italy', flag: '🇮🇹', name: 'shopname.it' },
+    { country: 'China', flag: '🇨🇳', name: 'shopname.cn' },
+    { country: 'Germany', flag: '🇩🇪', name: 'shopname.de' },
     { country: 'Denmark', flag: '🇩🇰', name: 'shopname.dk' },
     { country: 'France', flag: '🇫🇷', name: 'shopname.fr' },
-    { country: 'Arabic Emirates', flag: '🇦🇪', name: 'shopname.ae' },
-    { country: 'China', flag: '🇨🇳', name: 'shopname.cn' },
-    { country: 'Great Britain', flag: '🇬🇧', name: 'shopname.gb' }
+    { country: 'United Kingdom', flag: '🇬🇧', name: 'shopname.uk' },
+    { country: 'Italy', flag: '🇮🇹', name: 'shopname.it' },
+    { country: 'Russia', flag: '🇷🇺', name: 'shopname.ru' },
+    { country: 'United States', flag: '🇺🇸', name: 'shopname.us' }
   ];
 
   return (
@@ -124,7 +125,7 @@ function App() {
             <div className="flex items-center space-x-6">
               <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
                 <span>English, USD</span>
-                <span>Ship to 🇮🇳</span>
+                <span>Ship to 🇫🇷</span>
               </div>
               <div className="flex items-center space-x-4">
                 <User className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
@@ -220,7 +221,7 @@ function App() {
               </div>
             </div>
 
-            {/* Deals and Offers */}
+            {/* Deals and Offers - Single Box */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-semibold">Deals and offers</h3>
@@ -248,33 +249,36 @@ function App() {
               </div>
             </div>
 
-            {/* Home and Outdoor */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <div className="flex items-center justify-between mb-4">
+            {/* Home and Outdoor - Single Box */}
+            <div className="bg-white rounded-lg shadow-sm">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-semibold">Home and outdoor</h3>
                   <button className="text-blue-500 text-sm hover:underline">Source now</button>
                 </div>
-                <div className="grid grid-cols-4 gap-3">
+                <div className="grid grid-cols-4 gap-4">
                   {homeProducts.map((product, index) => (
                     <div key={index} className="text-center">
-                      <div className="w-16 h-16 bg-gray-100 rounded mb-2 mx-auto"></div>
+                      <div className="w-20 h-20 bg-gray-100 rounded mb-2 mx-auto"></div>
                       <p className="text-xs text-gray-600 mb-1">{product.name}</p>
                       <p className="text-xs text-gray-500">{product.price}</p>
                     </div>
                   ))}
                 </div>
               </div>
+            </div>
 
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <div className="flex items-center justify-between mb-4">
+            {/* Consumer Electronics and Gadgets - Single Box */}
+            <div className="bg-white rounded-lg shadow-sm">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
                   <h3 className="text-lg font-semibold">Consumer electronics and gadgets</h3>
                   <button className="text-blue-500 text-sm hover:underline">Source now</button>
                 </div>
-                <div className="grid grid-cols-4 gap-3">
+                <div className="grid grid-cols-4 gap-4">
                   {electronicsProducts.map((product, index) => (
                     <div key={index} className="text-center">
-                      <div className="w-16 h-16 bg-gray-100 rounded mb-2 mx-auto"></div>
+                      <div className="w-20 h-20 bg-gray-100 rounded mb-2 mx-auto"></div>
                       <p className="text-xs text-gray-600 mb-1">{product.name}</p>
                       <p className="text-xs text-gray-500">{product.price}</p>
                     </div>
@@ -359,7 +363,7 @@ function App() {
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 {suppliers.map((supplier, index) => (
                   <div key={index} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                    <span className="text-2xl">{supplier.flag}</span>
+                    <FlagIcon country={supplier.country} className="w-8 h-6 rounded" />
                     <div>
                       <p className="text-sm font-medium text-gray-900">{supplier.country}</p>
                       <p className="text-xs text-gray-500">{supplier.name}</p>
@@ -407,11 +411,36 @@ function App() {
                 Best information about the company gies here but now lorem ipsum is
               </p>
               <div className="flex space-x-3">
-                <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-                <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-                <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-                <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
-                <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                {/* Facebook */}
+                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </div>
+                {/* Twitter/X */}
+                <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </div>
+                {/* LinkedIn */}
+                <div className="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </div>
+                {/* Instagram */}
+                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.297-3.323C5.902 8.198 7.053 7.708 8.35 7.708s2.448.49 3.323 1.297c.897.896 1.387 2.047 1.387 3.344s-.49 2.448-1.297 3.323c-.896.897-2.047 1.387-3.344 1.387zm7.718 0c-1.297 0-2.448-.49-3.323-1.297-.897-.896-1.387-2.047-1.387-3.344s.49-2.448 1.297-3.323c.896-.897 2.047-1.387 3.344-1.387s2.448.49 3.323 1.297c.897.896 1.387 2.047 1.387 3.344s-.49 2.448-1.297 3.323c-.896.897-2.047 1.387-3.344 1.387z"/>
+                  </svg>
+                </div>
+                {/* YouTube */}
+                <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                </div>
               </div>
             </div>
 
@@ -456,10 +485,16 @@ function App() {
               <div>
                 <h5 className="font-semibold text-gray-900 mb-2">Get app</h5>
                 <div className="space-y-2">
-                  <div className="w-32 h-10 bg-black rounded flex items-center justify-center">
+                  <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
                     <span className="text-white text-xs">App Store</span>
                   </div>
-                  <div className="w-32 h-10 bg-black rounded flex items-center justify-center">
+                  <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.833 12l1.865-1.865zM5.864 2.658L16.802 8.99l-2.302 2.302-8.636-8.634z"/>
+                    </svg>
                     <span className="text-white text-xs">Google Play</span>
                   </div>
                 </div>
