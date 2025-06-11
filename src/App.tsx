@@ -5,6 +5,10 @@ import FlagIcon from './components/FlagIcon';
 function App() {
   const [selectedCategory, setSelectedCategory] = useState('All category');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('English, USD');
+  const [selectedShipping, setSelectedShipping] = useState('France');
+  const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+  const [showShippingDropdown, setShowShippingDropdown] = useState(false);
 
   const categories = [
     'All category',
@@ -19,54 +23,87 @@ function App() {
     'More category'
   ];
 
+  const languageOptions = [
+    'English, USD',
+    'Español, EUR',
+    'Français, EUR',
+    'Deutsch, EUR',
+    '中文, CNY'
+  ];
+
+  const shippingOptions = [
+    { country: 'France', flag: 'France' },
+    { country: 'United States', flag: 'United States' },
+    { country: 'Germany', flag: 'Germany' },
+    { country: 'United Kingdom', flag: 'United Kingdom' },
+    { country: 'Italy', flag: 'Italy' },
+    { country: 'China', flag: 'China' }
+  ];
+
   const deals = [
-    { name: 'Smart watches', discount: '-25%', image: '/api/placeholder/120/120' },
-    { name: 'Laptops', discount: '-15%', image: '/api/placeholder/120/120' },
-    { name: 'GoPro cameras', discount: '-40%', image: '/api/placeholder/120/120' },
-    { name: 'Headphones', discount: '-25%', image: '/api/placeholder/120/120' },
-    { name: 'Canon cameras', discount: '-25%', image: '/api/placeholder/120/120' }
+    { name: 'Smart watches', discount: '-25%', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=120&h=120&fit=crop&crop=center' },
+    { name: 'Laptops', discount: '-15%', image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=120&h=120&fit=crop&crop=center' },
+    { name: 'GoPro cameras', discount: '-40%', image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=120&h=120&fit=crop&crop=center' },
+    { name: 'Headphones', discount: '-25%', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=120&h=120&fit=crop&crop=center' },
+    { name: 'Canon cameras', discount: '-25%', image: 'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=120&h=120&fit=crop&crop=center' }
   ];
 
   const homeProducts = [
-    { name: 'Soft chairs', price: 'USD 19', image: '/api/placeholder/100/100' },
-    { name: 'Sofa & chair', price: 'USD 25', image: '/api/placeholder/100/100' },
-    { name: 'Kitchen dishes', price: 'USD 4.50', image: '/api/placeholder/100/100' },
-    { name: 'Smart watches', price: 'USD 19', image: '/api/placeholder/100/100' },
-    { name: 'Kitchen mixer', price: 'USD 100', image: '/api/placeholder/100/100' },
-    { name: 'Blenders', price: 'USD 39', image: '/api/placeholder/100/100' },
-    { name: 'Home appliance', price: 'USD 10', image: '/api/placeholder/100/100' },
-    { name: 'Coffee maker', price: 'USD 10', image: '/api/placeholder/100/100' }
+    { name: 'Soft chairs', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Sofa & chair', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Kitchen dishes', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Smart watches', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Kitchen mixer', price: 'From USD 100', image: 'https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Blenders', price: 'From USD 39', image: 'https://images.unsplash.com/photo-1585515656643-808d6b69a52d?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Home appliance', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Coffee maker', price: 'From USD 10', image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=150&h=150&fit=crop&crop=center' }
   ];
 
   const electronicsProducts = [
-    { name: 'Smart watches', price: 'USD 19', image: '/api/placeholder/100/100' },
-    { name: 'Cameras', price: 'USD 89', image: '/api/placeholder/100/100' },
-    { name: 'Headphones', price: 'USD 10', image: '/api/placeholder/100/100' },
-    { name: 'Smart watches', price: 'USD 90', image: '/api/placeholder/100/100' },
-    { name: 'Gaming set', price: 'USD 35', image: '/api/placeholder/100/100' },
-    { name: 'Laptops & PC', price: 'USD 340', image: '/api/placeholder/100/100' },
-    { name: 'Smartphones', price: 'USD 19', image: '/api/placeholder/100/100' },
-    { name: 'Electric kettle', price: 'USD 240', image: '/api/placeholder/100/100' }
+    { name: 'Smart watches', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Cameras', price: 'From USD 89', image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Headphones', price: 'From USD 10', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Smart watches', price: 'From USD 90', image: 'https://images.unsplash.com/photo-1579586337278-3f436f25d4d6?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Gaming set', price: 'From USD 35', image: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Laptops & PC', price: 'From USD 340', image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Smartphones', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Electric kettle', price: 'From USD 240', image: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=150&h=150&fit=crop&crop=center' }
   ];
 
   const recommendedItems = [
-    { name: 'T-shirts with multiple colors, for men', price: '$10.30', image: '/api/placeholder/150/150' },
-    { name: 'Jeans shorts for men blue color', price: '$10.30', image: '/api/placeholder/150/150' },
-    { name: 'Brown winter coat medium size', price: '$12.50', image: '/api/placeholder/150/150' },
-    { name: 'Jeans bag for travel for men', price: '$34.00', image: '/api/placeholder/150/150' },
-    { name: 'Leather wallet', price: '$99.00', image: '/api/placeholder/150/150' },
-    { name: 'Canon camera black, 100x zoom', price: '$9.99', image: '/api/placeholder/150/150' },
-    { name: 'Headset for gaming with mic', price: '$8.99', image: '/api/placeholder/150/150' },
-    { name: 'Smartwatch silver color modern', price: '$10.30', image: '/api/placeholder/150/150' },
-    { name: 'Blue wallet for men, leather material', price: '$10.30', image: '/api/placeholder/150/150' },
-    { name: 'Jeans bag for travel for men', price: '$80.95', image: '/api/placeholder/150/150' }
+    { name: 'T-shirts with multiple colors, for men', price: '$10.30', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Jeans shorts for men blue color', price: '$10.30', image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Brown winter coat medium size', price: '$12.50', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Jeans bag for travel for men', price: '$34.00', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Leather wallet', price: '$99.00', image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Canon camera black, 100x zoom', price: '$9.99', image: 'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Headset for gaming with mic', price: '$8.99', image: 'https://images.unsplash.com/photo-1599669454699-248893623440?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Smartwatch silver color modern', price: '$10.30', image: 'https://images.unsplash.com/photo-1579586337278-3f436f25d4d6?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Blue wallet for men, leather material', price: '$10.30', image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=150&h=150&fit=crop&crop=center' },
+    { name: 'Jeans bag for travel for men', price: '$80.95', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=150&h=150&fit=crop&crop=center' }
   ];
 
   const services = [
-    { title: 'Source from Industry Hubs', image: '/api/placeholder/200/150' },
-    { title: 'Customize Your Products', image: '/api/placeholder/200/150' },
-    { title: 'Fast, reliable shipping by ocean or air', image: '/api/placeholder/200/150' },
-    { title: 'Product monitoring and inspection', image: '/api/placeholder/200/150' }
+    { 
+      title: 'Source from Industry Hubs', 
+      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=300&h=200&fit=crop&crop=center',
+      icon: Search
+    },
+    { 
+      title: 'Customize Your Products', 
+      image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop&crop=center',
+      icon: Eye
+    },
+    { 
+      title: 'Fast, reliable shipping by ocean or air', 
+      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop&crop=center',
+      icon: Truck
+    },
+    { 
+      title: 'Product monitoring and inspection', 
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop&crop=center',
+      icon: Shield
+    }
   ];
 
   const suppliers = [
@@ -124,8 +161,61 @@ function App() {
 
             <div className="flex items-center space-x-6">
               <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
-                <span>English, USD</span>
-                <span>Ship to 🇫🇷</span>
+                {/* Language/Currency Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+                    className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer"
+                  >
+                    <span>{selectedLanguage}</span>
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                  {showLanguageDropdown && (
+                    <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px]">
+                      {languageOptions.map((option) => (
+                        <button
+                          key={option}
+                          onClick={() => {
+                            setSelectedLanguage(option);
+                            setShowLanguageDropdown(false);
+                          }}
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
+                        >
+                          {option}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Shipping Dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowShippingDropdown(!showShippingDropdown)}
+                    className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer"
+                  >
+                    <span>Ship to</span>
+                    <FlagIcon country={selectedShipping} className="w-5 h-4 rounded" />
+                    <ChevronDown className="w-4 h-4" />
+                  </button>
+                  {showShippingDropdown && (
+                    <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px]">
+                      {shippingOptions.map((option) => (
+                        <button
+                          key={option.country}
+                          onClick={() => {
+                            setSelectedShipping(option.country);
+                            setShowShippingDropdown(false);
+                          }}
+                          className="flex items-center space-x-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
+                        >
+                          <FlagIcon country={option.flag} className="w-5 h-4 rounded" />
+                          <span>{option.country}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
               <div className="flex items-center space-x-4">
                 <User className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
@@ -236,8 +326,12 @@ function App() {
                 {deals.map((deal, index) => (
                   <div key={index} className="text-center group cursor-pointer">
                     <div className="relative mb-3">
-                      <div className="w-24 h-24 bg-gray-100 rounded-lg mx-auto flex items-center justify-center">
-                        <div className="w-16 h-16 bg-gray-200 rounded"></div>
+                      <div className="w-24 h-24 bg-gray-100 rounded-lg mx-auto overflow-hidden">
+                        <img 
+                          src={deal.image} 
+                          alt={deal.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                        />
                       </div>
                       <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
                         {deal.discount}
@@ -249,40 +343,98 @@ function App() {
               </div>
             </div>
 
-            {/* Home and Outdoor - Single Box */}
-            <div className="bg-white rounded-lg shadow-sm">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold">Home and outdoor</h3>
-                  <button className="text-blue-500 text-sm hover:underline">Source now</button>
+            {/* Home and Outdoor - New Design */}
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+              <div className="grid grid-cols-1 lg:grid-cols-3 h-64">
+                {/* Left side with background image and text */}
+                <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 p-6 flex flex-col justify-between">
+                  <div className="absolute inset-0 opacity-20">
+                    <img 
+                      src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&crop=center" 
+                      alt="Home and outdoor background"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="relative z-10">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Home and outdoor</h3>
+                    <button className="bg-white text-gray-900 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition-colors">
+                      Source now
+                    </button>
+                  </div>
+                  <div className="relative z-10">
+                    <img 
+                      src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=150&fit=crop&crop=center" 
+                      alt="Featured product"
+                      className="w-32 h-24 object-cover rounded opacity-80"
+                    />
+                  </div>
                 </div>
-                <div className="grid grid-cols-4 gap-4">
-                  {homeProducts.map((product, index) => (
-                    <div key={index} className="text-center">
-                      <div className="w-20 h-20 bg-gray-100 rounded mb-2 mx-auto"></div>
-                      <p className="text-xs text-gray-600 mb-1">{product.name}</p>
-                      <p className="text-xs text-gray-500">{product.price}</p>
-                    </div>
-                  ))}
+
+                {/* Right side with 8 product boxes */}
+                <div className="lg:col-span-2 p-4">
+                  <div className="grid grid-cols-4 gap-3 h-full">
+                    {homeProducts.map((product, index) => (
+                      <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer">
+                        <div className="w-full h-16 bg-gray-50 rounded mb-2 overflow-hidden">
+                          <img 
+                            src={product.image} 
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                          />
+                        </div>
+                        <p className="text-xs text-gray-600 mb-1 line-clamp-2 group-hover:text-blue-500">{product.name}</p>
+                        <p className="text-xs text-gray-500 font-medium">{product.price}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Consumer Electronics and Gadgets - Single Box */}
-            <div className="bg-white rounded-lg shadow-sm">
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold">Consumer electronics and gadgets</h3>
-                  <button className="text-blue-500 text-sm hover:underline">Source now</button>
+            {/* Consumer Electronics and Gadgets - New Design */}
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+              <div className="grid grid-cols-1 lg:grid-cols-3 h-64">
+                {/* Left side with background image and text */}
+                <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-6 flex flex-col justify-between">
+                  <div className="absolute inset-0 opacity-20">
+                    <img 
+                      src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400&h=300&fit=crop&crop=center" 
+                      alt="Electronics background"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="relative z-10">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Consumer electronics and gadgets</h3>
+                    <button className="bg-white text-gray-900 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition-colors">
+                      Source now
+                    </button>
+                  </div>
+                  <div className="relative z-10">
+                    <img 
+                      src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=200&h=150&fit=crop&crop=center" 
+                      alt="Featured electronics"
+                      className="w-32 h-24 object-cover rounded opacity-80"
+                    />
+                  </div>
                 </div>
-                <div className="grid grid-cols-4 gap-4">
-                  {electronicsProducts.map((product, index) => (
-                    <div key={index} className="text-center">
-                      <div className="w-20 h-20 bg-gray-100 rounded mb-2 mx-auto"></div>
-                      <p className="text-xs text-gray-600 mb-1">{product.name}</p>
-                      <p className="text-xs text-gray-500">{product.price}</p>
-                    </div>
-                  ))}
+
+                {/* Right side with 8 product boxes */}
+                <div className="lg:col-span-2 p-4">
+                  <div className="grid grid-cols-4 gap-3 h-full">
+                    {electronicsProducts.map((product, index) => (
+                      <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer">
+                        <div className="w-full h-16 bg-gray-50 rounded mb-2 overflow-hidden">
+                          <img 
+                            src={product.image} 
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                          />
+                        </div>
+                        <p className="text-xs text-gray-600 mb-1 line-clamp-2 group-hover:text-blue-500">{product.name}</p>
+                        <p className="text-xs text-gray-500 font-medium">{product.price}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -328,32 +480,49 @@ function App() {
               <h3 className="text-xl font-semibold mb-6">Recommended items</h3>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 {recommendedItems.map((item, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                    <div className="w-full h-32 bg-gray-100 rounded mb-3"></div>
+                  <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow group cursor-pointer">
+                    <div className="w-full h-32 bg-gray-100 rounded mb-3 overflow-hidden">
+                      <img 
+                        src={item.image} 
+                        alt={item.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                      />
+                    </div>
                     <p className="text-sm font-medium text-gray-900 mb-2">{item.price}</p>
-                    <p className="text-xs text-gray-600 line-clamp-2">{item.name}</p>
+                    <p className="text-xs text-gray-600 line-clamp-2 group-hover:text-blue-500">{item.name}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Extra Services */}
+            {/* Extra Services - Updated Design */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h3 className="text-xl font-semibold mb-6">Our extra services</h3>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                {services.map((service, index) => (
-                  <div key={index} className="relative rounded-lg overflow-hidden group cursor-pointer">
-                    <div className="h-32 bg-gray-200 flex items-center justify-center">
-                      <div className="w-16 h-16 bg-gray-300 rounded"></div>
+                {services.map((service, index) => {
+                  const IconComponent = service.icon;
+                  return (
+                    <div key={index} className="relative rounded-lg overflow-hidden group cursor-pointer">
+                      <div className="h-32 bg-gray-200 overflow-hidden">
+                        <img 
+                          src={service.image} 
+                          alt={service.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                        />
+                      </div>
+                      <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-between p-4">
+                        <div className="flex justify-end">
+                          <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                            <IconComponent className="w-5 h-5 text-white" />
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-white text-sm font-medium leading-tight">{service.title}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end p-4">
-                      <p className="text-white text-sm font-medium">{service.title}</p>
-                    </div>
-                    <div className="absolute top-2 right-2">
-                      <Search className="w-5 h-5 text-white" />
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
@@ -511,6 +680,17 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Click outside to close dropdowns */}
+      {(showLanguageDropdown || showShippingDropdown) && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => {
+            setShowLanguageDropdown(false);
+            setShowShippingDropdown(false);
+          }}
+        />
+      )}
     </div>
   );
 }
