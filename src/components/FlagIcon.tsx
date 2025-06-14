@@ -124,6 +124,17 @@ const FlagIcon: React.FC<FlagIconProps> = ({ country, className = "w-8 h-6" }) =
             </g>
           </svg>
         );
+      case 'Pakistan':
+        return (
+          <svg className={className} viewBox="0 0 24 16" fill="none">
+            <rect width="24" height="16" fill="#01411C"/>
+            <rect width="6" height="16" fill="#FFFFFF"/>
+            <g fill="#FFFFFF" transform="translate(12, 8)">
+              <circle cx="0" cy="-2" r="2.5" fill="none" stroke="#FFFFFF" strokeWidth="0.5"/>
+              <polygon points="2,0 2.5,-0.5 3,0 2.5,0.5" fill="#FFFFFF"/>
+            </g>
+          </svg>
+        );
       default:
         return (
           <div className={`${className} bg-gray-200 rounded flex items-center justify-center`}>

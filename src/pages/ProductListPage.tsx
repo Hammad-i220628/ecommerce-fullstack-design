@@ -29,6 +29,8 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
   const [activeFilters, setActiveFilters] = useState<string[]>(['Samsung', 'Apple', 'Pocco', 'Metallic', '4 star', '3 star']);
   const [email, setEmail] = useState('');
   const [expandedSections, setExpandedSections] = useState<string[]>(['category', 'brands', 'features']);
+  const [selectedCountry, setSelectedCountry] = useState('United States');
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
 
   const products: Product[] = [
     {
@@ -144,6 +146,16 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
     { id: '1star', label: '1 star', checked: false }
   ];
 
+  const countries = [
+    'United States',
+    'United Kingdom', 
+    'Germany',
+    'France',
+    'China',
+    'Australia',
+    'Pakistan'
+  ];
+
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev =>
       prev.includes(sectionId)
@@ -175,6 +187,11 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
     e.preventDefault();
     console.log('Newsletter subscription:', email);
     setEmail('');
+  };
+
+  const handleCountrySelect = (country: string) => {
+    setSelectedCountry(country);
+    setShowCountryDropdown(false);
   };
 
   return (
@@ -295,7 +312,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
               <div className="p-4 border-b border-gray-200">
                 <button
                   onClick={() => toggleSection('price')}
-                  className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
+                  className="flex items-center justify-between w-full text-left font-left font-medium text-gray-900 mb-3"
                 >
                   <span>Price range</span>
                   <ChevronDown
@@ -525,9 +542,6 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
                 </div>
                 <span className="text-xl font-bold text-blue-500">Brand</span>
               </div>
-              <p className="text-gray-600 text-sm mb-6">
-                Best information about the company gies here but now lorem ipsum is
-              </p>
               <div className="flex space-x-3">
                 <a href="#" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700">
                   <Facebook className="w-4 h-4" />
@@ -616,9 +630,32 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
             <div className="text-sm text-gray-600">
               © 2023 Ecommerce.
             </div>
-            <div className="flex items-center space-x-2 mt-4 md:mt-0">
-              <span className="text-sm text-gray-600">🇺🇸 English</span>
-              <ChevronDown className="w-4 h-4 text-gray-600" />
+            <div className="relative mt-4 md:mt-0">
+              <button
+                onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <FlagIcon country={selectedCountry} className="w-5 h-4" />
+                <span className="text-sm text-gray-700">{selectedCountry}</span>
+                <ChevronDown className="w-4 h-4 text-gray-600" />
+              </button>
+              
+              {showCountryDropdown && (
+                <div className="absolute bottom-full right-0 mb-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                  <div className="py-2">
+                    {countries.map((country) => (
+                      <button
+                        key={country}
+                        onClick={() => handleCountrySelect(country)}
+                        className="flex items-center space-x-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FlagIcon country={country} className="w-5 h-4" />
+                        <span>{country}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
