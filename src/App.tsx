@@ -908,93 +908,83 @@ function App() {
         </div>
       </section>
 
-      {/* Footer */}
+           {/* Footer */}
       <footer className="bg-white border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-8">
+            {/* Brand Section */}
+            <div className="md:col-span-1">
               <div className="flex items-center space-x-2 mb-4">
                 <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
                   <span className="text-white font-bold text-sm">B</span>
                 </div>
                 <span className="text-xl font-bold text-blue-500">Brand</span>
               </div>
-              <p className="text-gray-600 text-sm mb-4">
-                Best information about the company gies here but now lorem ipsum is
-              </p>
               <div className="flex space-x-3">
-                {/* Facebook */}
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                </div>
-                {/* Twitter/X */}
-                <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                  </svg>
-                </div>
-                {/* LinkedIn */}
-                <div className="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
-                </div>
-                {/* Instagram */}
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.297-3.323C5.902 8.198 7.053 7.708 8.35 7.708s2.448.49 3.323 1.297c.897.896 1.387 2.047 1.387 3.344s-.49 2.448-1.297 3.323c-.896.897-2.047 1.387-3.344 1.387zm7.718 0c-1.297 0-2.448-.49-3.323-1.297-.897-.896-1.387-2.047-1.387-3.344s.49-2.448 1.297-3.323c.896-.897 2.047-1.387 3.344-1.387s2.448.49 3.323 1.297c.897.896 1.387 2.047 1.387 3.344s-.49 2.448-1.297 3.323c-.896.897-2.047 1.387-3.344 1.387z"/>
-                  </svg>
-                </div>
-                {/* YouTube */}
-                <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                  </svg>
-                </div>
+                <a href="#" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700">
+                  <Facebook className="w-4 h-4" />
+                </a>
+                <a href="#" className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white hover:bg-gray-800">
+                  <Twitter className="w-4 h-4" />
+                </a>
+                <a href="#" className="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center text-white hover:bg-blue-800">
+                  <Linkedin className="w-4 h-4" />
+                </a>
+                <a href="#" className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white hover:bg-pink-600">
+                  <Instagram className="w-4 h-4" />
+                </a>
+                <a href="#" className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white hover:bg-red-700">
+                  <Youtube className="w-4 h-4" />
+                </a>
               </div>
             </div>
 
+            {/* About Section */}
             <div>
-              <h4 className="font-semibold text-gray-900 mb-4">About</h4>
+              <h3 className="font-semibold text-gray-900 mb-4">About</h3>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><a href="#" className="hover:text-blue-500">About Us</a></li>
-                <li><a href="#" className="hover:text-blue-500">Find store</a></li>
-                <li><a href="#" className="hover:text-blue-500">Categories</a></li>
-                <li><a href="#" className="hover:text-blue-500">Blogs</a></li>
+                <li><a href="#" className="hover:text-blue-600">About Us</a></li>
+                <li><a href="#" className="hover:text-blue-600">Find store</a></li>
+                <li><a href="#" className="hover:text-blue-600">Categories</a></li>
+                <li><a href="#" className="hover:text-blue-600">Blogs</a></li>
               </ul>
             </div>
 
+            {/* Partnership Section */}
             <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Partnership</h4>
+              <h3 className="font-semibold text-gray-900 mb-4">Partnership</h3>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><a href="#" className="hover:text-blue-500">About Us</a></li>
-                <li><a href="#" className="hover:text-blue-500">Find store</a></li>
-                <li><a href="#" className="hover:text-blue-500">Categories</a></li>
-                <li><a href="#" className="hover:text-blue-500">Blogs</a></li>
+                <li><a href="#" className="hover:text-blue-600">About Us</a></li>
+                <li><a href="#" className="hover:text-blue-600">Find store</a></li>
+                <li><a href="#" className="hover:text-blue-600">Categories</a></li>
+                <li><a href="#" className="hover:text-blue-600">Blogs</a></li>
               </ul>
             </div>
 
+            {/* Information Section */}
             <div>
-              <h4 className="font-semibold text-gray-900 mb-4">Information</h4>
+              <h3 className="font-semibold text-gray-900 mb-4">Information</h3>
               <ul className="space-y-2 text-sm text-gray-600">
-                <li><a href="#" className="hover:text-blue-500">Help Center</a></li>
-                <li><a href="#" className="hover:text-blue-500">Money Refund</a></li>
-                <li><a href="#" className="hover:text-blue-500">Shipping</a></li>
-                <li><a href="#" className="hover:text-blue-500">Contact us</a></li>
+                <li><a href="#" className="hover:text-blue-600">Help Center</a></li>
+                <li><a href="#" className="hover:text-blue-600">Money Refund</a></li>
+                <li><a href="#" className="hover:text-blue-600">Shipping</a></li>
+                <li><a href="#" className="hover:text-blue-600">Contact us</a></li>
               </ul>
             </div>
 
+            {/* For Users Section */}
             <div>
-              <h4 className="font-semibold text-gray-900 mb-4">For users</h4>
-              <ul className="space-y-2 text-sm text-gray-600 mb-4">
-                <li><a href="#" className="hover:text-blue-500">Login</a></li>
-                <li><a href="#" className="hover:text-blue-500">Register</a></li>
-                <li><a href="#" className="hover:text-blue-500">Settings</a></li>
-                <li><a href="#" className="hover:text-blue-500">My Orders</a></li>
+              <h3 className="font-semibold text-gray-900 mb-4">For users</h3>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li><a href="#" className="hover:text-blue-600">Login</a></li>
+                <li><a href="#" className="hover:text-blue-600">Register</a></li>
+                <li><a href="#" className="hover:text-blue-600">Settings</a></li>
+                <li><a href="#" className="hover:text-blue-600">My Orders</a></li>
               </ul>
-              <div>
+            </div>
+
+            {/* Get app Section */}
+            <div>
                 <h5 className="font-semibold text-gray-900 mb-2">Get app</h5>
                 <div className="space-y-2">
                   <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
@@ -1011,14 +1001,39 @@ function App() {
                   </div>
                 </div>
               </div>
-            </div>
           </div>
 
-          <div className="border-t border-gray-200 mt-8 pt-8 flex justify-between items-center text-sm text-gray-600">
-            <p>© 2023 Ecommerce.</p>
-            <div className="flex items-center space-x-2">
-              <span>🇺🇸 English</span>
-              <ChevronDown className="w-4 h-4" />
+          {/* Bottom Footer */}
+          <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <div className="text-sm text-gray-600">
+              © 2023 Ecommerce.
+            </div>
+            <div className="relative mt-4 md:mt-0">
+              <button
+                onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+                className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <FlagIcon country={selectedCountry} className="w-5 h-4" />
+                <span className="text-sm text-gray-700">{selectedCountry}</span>
+                <ChevronDown className="w-4 h-4 text-gray-600" />
+              </button>
+              
+              {showCountryDropdown && (
+                <div className="absolute bottom-full right-0 mb-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                  <div className="py-2">
+                    {countries.map((country) => (
+                      <button
+                        key={country}
+                        onClick={() => handleCountrySelect(country)}
+                        className="flex items-center space-x-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FlagIcon country={country} className="w-5 h-4" />
+                        <span>{country}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
