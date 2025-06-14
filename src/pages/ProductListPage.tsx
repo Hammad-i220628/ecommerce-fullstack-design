@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, List, ChevronDown, Filter } from 'lucide-react';
+import { Grid, List, ChevronDown, Filter, Facebook, Twitter, Linkedin, Instagram, Youtube } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import ProductFilters from '../components/ProductFilters';
 
@@ -28,6 +28,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
   const [showFilters, setShowFilters] = useState(true);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [activeFilters, setActiveFilters] = useState<Array<{sectionId: string, optionId: string, label: string}>>([]);
+  const [email, setEmail] = useState('');
 
   const products: Product[] = [
     {
@@ -200,6 +201,12 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
     console.log('Price range:', min, max);
   };
 
+  const handleNewsletterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Newsletter subscription:', email);
+    setEmail('');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
@@ -315,6 +322,148 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
           </div>
         </div>
       </div>
+
+      {/* Newsletter Subscription Section */}
+      <div className="bg-gray-100 py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">Subscribe on our newsletter</h2>
+          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+            Get daily news on upcoming offers from many suppliers all over the world
+          </p>
+          <form onSubmit={handleNewsletterSubmit} className="flex max-w-md mx-auto">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
+            />
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-6 py-3 rounded-r-lg hover:bg-blue-600 transition-colors font-medium"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+            {/* Brand Section */}
+            <div className="md:col-span-1">
+              <div className="flex items-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">B</span>
+                </div>
+                <span className="text-xl font-bold text-blue-500">Brand</span>
+              </div>
+              <p className="text-gray-600 text-sm mb-6">
+                Best information about the company gies here but now lorem ipsum is
+              </p>
+              <div className="flex space-x-3">
+                <a href="#" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700">
+                  <Facebook className="w-4 h-4" />
+                </a>
+                <a href="#" className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white hover:bg-gray-800">
+                  <Twitter className="w-4 h-4" />
+                </a>
+                <a href="#" className="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center text-white hover:bg-blue-800">
+                  <Linkedin className="w-4 h-4" />
+                </a>
+                <a href="#" className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white hover:bg-pink-600">
+                  <Instagram className="w-4 h-4" />
+                </a>
+                <a href="#" className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white hover:bg-red-700">
+                  <Youtube className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            {/* About Section */}
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">About</h3>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li><a href="#" className="hover:text-blue-600">About Us</a></li>
+                <li><a href="#" className="hover:text-blue-600">Find store</a></li>
+                <li><a href="#" className="hover:text-blue-600">Categories</a></li>
+                <li><a href="#" className="hover:text-blue-600">Blogs</a></li>
+              </ul>
+            </div>
+
+            {/* Partnership Section */}
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">Partnership</h3>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li><a href="#" className="hover:text-blue-600">About Us</a></li>
+                <li><a href="#" className="hover:text-blue-600">Find store</a></li>
+                <li><a href="#" className="hover:text-blue-600">Categories</a></li>
+                <li><a href="#" className="hover:text-blue-600">Blogs</a></li>
+              </ul>
+            </div>
+
+            {/* Information Section */}
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">Information</h3>
+              <ul className="space-y-2 text-sm text-gray-600">
+                <li><a href="#" className="hover:text-blue-600">Help Center</a></li>
+                <li><a href="#" className="hover:text-blue-600">Money Refund</a></li>
+                <li><a href="#" className="hover:text-blue-600">Shipping</a></li>
+                <li><a href="#" className="hover:text-blue-600">Contact us</a></li>
+              </ul>
+            </div>
+
+            {/* For Users Section */}
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-4">For users</h3>
+              <ul className="space-y-2 text-sm text-gray-600 mb-6">
+                <li><a href="#" className="hover:text-blue-600">Login</a></li>
+                <li><a href="#" className="hover:text-blue-600">Register</a></li>
+                <li><a href="#" className="hover:text-blue-600">Settings</a></li>
+                <li><a href="#" className="hover:text-blue-600">My Orders</a></li>
+              </ul>
+              
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-3">Get app</h4>
+                <div className="space-y-2">
+                  <a href="#" className="block">
+                    <div className="bg-black text-white px-4 py-2 rounded-lg flex items-center space-x-2 text-sm">
+                      <span>📱</span>
+                      <div>
+                        <div className="text-xs">Download on the</div>
+                        <div className="font-semibold">App Store</div>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="#" className="block">
+                    <div className="bg-black text-white px-4 py-2 rounded-lg flex items-center space-x-2 text-sm">
+                      <span>▶️</span>
+                      <div>
+                        <div className="text-xs">Get it on</div>
+                        <div className="font-semibold">Google Play</div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Footer */}
+          <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <div className="text-sm text-gray-600">
+              © 2023 Ecommerce.
+            </div>
+            <div className="flex items-center space-x-2 mt-4 md:mt-0">
+              <span className="text-sm text-gray-600">🇺🇸 English</span>
+              <ChevronDown className="w-4 h-4 text-gray-600" />
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
