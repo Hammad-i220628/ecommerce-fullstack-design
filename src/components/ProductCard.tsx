@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Star, Eye } from 'lucide-react';
+import { Heart, Star } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -65,7 +65,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
                     {renderStars(product.rating)}
                   </div>
                   <span className="text-sm text-gray-500">
-                    {product.rating} • {product.reviews} orders
+                    {product.rating}
                   </span>
                   {product.freeShipping && (
                     <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded ml-2">
@@ -76,12 +76,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
                 {product.description && (
                   <p className="text-sm text-gray-600 line-clamp-2">{product.description}</p>
                 )}
-                <button 
-                  onClick={() => onProductClick(product.id)}
-                  className="text-sm text-blue-600 hover:text-blue-800 mt-2"
-                >
-                  View details
-                </button>
               </div>
               <div className="flex flex-col items-end space-y-2 ml-4">
                 <button className="p-2 text-gray-400 hover:text-red-500 transition-colors">
@@ -123,7 +117,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
           <div className="flex items-center">
             {renderStars(product.rating)}
           </div>
-          <span className="text-sm text-gray-500">{product.reviews}</span>
+          <span className="text-sm text-gray-500">{product.rating}</span>
         </div>
         <h3 
           className="text-sm font-medium text-gray-900 hover:text-blue-600 cursor-pointer line-clamp-2"

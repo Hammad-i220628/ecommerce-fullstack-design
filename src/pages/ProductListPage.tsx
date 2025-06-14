@@ -181,76 +181,11 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
     <div className="min-h-screen bg-gray-50">
       {/* Top Navigation */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="flex items-center justify-between py-3">
-            <div className="flex items-center space-x-8">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">B</span>
-                </div>
-                <span className="text-xl font-bold text-blue-500">Brand</span>
-              </div>
-              
-              <div className="flex items-center space-x-1">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="w-64 px-3 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-1 focus:ring-blue-500"
-                />
-                <select className="px-3 py-2 border-t border-b border-gray-300 bg-white text-sm">
-                  <option>All category</option>
-                </select>
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">
-                  Search
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-4 text-sm text-gray-600">
-                <a href="#" className="hover:text-blue-600">Profile</a>
-                <a href="#" className="hover:text-blue-600">Message</a>
-                <a href="#" className="hover:text-blue-600">Orders</a>
-                <a href="#" className="hover:text-blue-600">My cart</a>
-              </div>
-            </div>
-          </div>
-
-          {/* Secondary Navigation */}
-          <div className="flex items-center justify-between py-3 border-t border-gray-100">
-            <div className="flex items-center space-x-6">
-              <button className="flex items-center space-x-1 text-sm text-gray-700 hover:text-blue-600">
-                <span>☰</span>
-                <span>All category</span>
-              </button>
-              <a href="#" className="text-sm text-gray-700 hover:text-blue-600">Hot offers</a>
-              <a href="#" className="text-sm text-gray-700 hover:text-blue-600">Gift boxes</a>
-              <a href="#" className="text-sm text-gray-700 hover:text-blue-600">Projects</a>
-              <a href="#" className="text-sm text-gray-700 hover:text-blue-600">Menu item</a>
-              <div className="flex items-center space-x-1">
-                <a href="#" className="text-sm text-gray-700 hover:text-blue-600">Help</a>
-                <ChevronDown className="w-3 h-3 text-gray-500" />
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-1 text-sm text-gray-600">
-                <span>English, USD</span>
-                <ChevronDown className="w-3 h-3" />
-              </div>
-              <div className="flex items-center space-x-1 text-sm text-gray-600">
-                <span>Ship to</span>
-                <FlagIcon country="Germany" className="w-4 h-3" />
-                <ChevronDown className="w-3 h-3" />
-              </div>
-            </div>
-          </div>
-        </div>
+   
       </div>
 
       {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-200">
+      <div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <nav className="flex text-sm text-gray-500">
             <a href="#" className="hover:text-blue-600">Home</a>
