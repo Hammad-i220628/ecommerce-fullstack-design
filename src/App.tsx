@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { Search, User, Heart, ShoppingCart, Menu, ChevronDown, Star, MapPin, Truck, Shield, Eye, MessageSquare } from 'lucide-react';
 import FlagIcon from './components/FlagIcon';
+import ProductListPage from './pages/ProductListPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+
+type CurrentPage = 'home' | 'products' | 'product-detail';
 
 function App() {
+  const [currentPage, setCurrentPage] = useState<CurrentPage>('home');
+  const [selectedProductId, setSelectedProductId] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState('All category');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('English, USD');
@@ -119,6 +125,347 @@ function App() {
     { country: 'United States', flag: '🇺🇸', name: 'shopname.us' }
   ];
 
+  const handleProductClick = (productId: string) => {
+    setSelectedProductId(productId);
+    setCurrentPage('product-detail');
+  };
+
+  const handleBackToList = () => {
+    setCurrentPage('products');
+  };
+
+  const handleBackToHome = () => {
+    setCurrentPage('home');
+  };
+
+  const handleNavigateToProducts = () => {
+    setCurrentPage('products');
+  };
+
+  // Render different pages based on current page
+  if (currentPage === 'products') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-8">
+                <div className="flex items-center space-x-2 cursor-pointer" onClick={handleBackToHome}>
+                  <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">B</span>
+                  </div>
+                  <span className="text-xl font-bold text-blue-500">Brand</span>
+                </div>
+                
+                <div className="hidden md:flex items-center space-x-4">
+                  <div className="relative">
+                    <select 
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="appearance-none bg-white border border-gray-300 rounded-l px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      {categories.map((category) => (
+                        <option key={category} value={category}>{category}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  </div>
+                  <div className="flex">
+                    <input
+                      type="text"
+                      placeholder="Search"
+                      className="w-80 px-4 py-2 border-t border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button className="bg-blue-500 text-white px-6 py-2 rounded-r hover:bg-blue-600 transition-colors">
+                      Search
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-6">
+                <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+                      className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer"
+                    >
+                      <span>{selectedLanguage}</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    {showLanguageDropdown && (
+                      <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px]">
+                        {languageOptions.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => {
+                              setSelectedLanguage(option);
+                              setShowLanguageDropdown(false);
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowShippingDropdown(!showShippingDropdown)}
+                      className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer"
+                    >
+                      <span>Ship to</span>
+                      <FlagIcon country={selectedShipping} className="w-5 h-4 rounded" />
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    {showShippingDropdown && (
+                      <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px]">
+                        {shippingOptions.map((option) => (
+                          <button
+                            key={option.country}
+                            onClick={() => {
+                              setSelectedShipping(option.country);
+                              setShowShippingDropdown(false);
+                            }}
+                            className="flex items-center space-x-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
+                          >
+                            <FlagIcon country={option.flag} className="w-5 h-4 rounded" />
+                            <span>{option.country}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <User className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
+                  <MessageSquare className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
+                  <Heart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
+                  <ShoppingCart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center space-x-8 h-12 text-sm">
+                <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-500">
+                  <Menu className="w-4 h-4" />
+                  <span>All category</span>
+                </button>
+                <a href="#" className="text-gray-700 hover:text-blue-500">Hot offers</a>
+                <a href="#" className="text-gray-700 hover:text-blue-500">Gift boxes</a>
+                <a href="#" className="text-gray-700 hover:text-blue-500">Projects</a>
+                <a href="#" className="text-gray-700 hover:text-blue-500">Menu item</a>
+                <div className="flex items-center space-x-1 text-gray-700 hover:text-blue-500 cursor-pointer">
+                  <span>Help</span>
+                  <ChevronDown className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <ProductListPage onProductClick={handleProductClick} />
+
+        {/* Footer */}
+        <footer className="bg-white border-t border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+              <div>
+                <div className="flex items-center space-x-2 mb-4">
+                  <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">B</span>
+                  </div>
+                  <span className="text-xl font-bold text-blue-500">Brand</span>
+                </div>
+                <p className="text-gray-600 text-sm mb-4">
+                  Best information about the company gies here but now lorem ipsum is
+                </p>
+              </div>
+            </div>
+          </div>
+        </footer>
+
+        {(showLanguageDropdown || showShippingDropdown) && (
+          <div 
+            className="fixed inset-0 z-40" 
+            onClick={() => {
+              setShowLanguageDropdown(false);
+              setShowShippingDropdown(false);
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
+  if (currentPage === 'product-detail') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white shadow-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-8">
+                <div className="flex items-center space-x-2 cursor-pointer" onClick={handleBackToHome}>
+                  <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">B</span>
+                  </div>
+                  <span className="text-xl font-bold text-blue-500">Brand</span>
+                </div>
+                
+                <div className="hidden md:flex items-center space-x-4">
+                  <div className="relative">
+                    <select 
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="appearance-none bg-white border border-gray-300 rounded-l px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      {categories.map((category) => (
+                        <option key={category} value={category}>{category}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  </div>
+                  <div className="flex">
+                    <input
+                      type="text"
+                      placeholder="Search"
+                      className="w-80 px-4 py-2 border-t border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button className="bg-blue-500 text-white px-6 py-2 rounded-r hover:bg-blue-600 transition-colors">
+                      Search
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-6">
+                <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+                      className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer"
+                    >
+                      <span>{selectedLanguage}</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    {showLanguageDropdown && (
+                      <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px]">
+                        {languageOptions.map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => {
+                              setSelectedLanguage(option);
+                              setShowLanguageDropdown(false);
+                            }}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowShippingDropdown(!showShippingDropdown)}
+                      className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer"
+                    >
+                      <span>Ship to</span>
+                      <FlagIcon country={selectedShipping} className="w-5 h-4 rounded" />
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    {showShippingDropdown && (
+                      <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px]">
+                        {shippingOptions.map((option) => (
+                          <button
+                            key={option.country}
+                            onClick={() => {
+                              setSelectedShipping(option.country);
+                              setShowShippingDropdown(false);
+                            }}
+                            className="flex items-center space-x-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
+                          >
+                            <FlagIcon country={option.flag} className="w-5 h-4 rounded" />
+                            <span>{option.country}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <User className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
+                  <MessageSquare className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
+                  <Heart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
+                  <ShoppingCart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center space-x-8 h-12 text-sm">
+                <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-500">
+                  <Menu className="w-4 h-4" />
+                  <span>All category</span>
+                </button>
+                <a href="#" className="text-gray-700 hover:text-blue-500">Hot offers</a>
+                <a href="#" className="text-gray-700 hover:text-blue-500">Gift boxes</a>
+                <a href="#" className="text-gray-700 hover:text-blue-500">Projects</a>
+                <a href="#" className="text-gray-700 hover:text-blue-500">Menu item</a>
+                <div className="flex items-center space-x-1 text-gray-700 hover:text-blue-500 cursor-pointer">
+                  <span>Help</span>
+                  <ChevronDown className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <ProductDetailPage productId={selectedProductId} onBackToList={handleBackToList} />
+
+        {/* Footer */}
+        <footer className="bg-white border-t border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+              <div>
+                <div className="flex items-center space-x-2 mb-4">
+                  <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">B</span>
+                  </div>
+                  <span className="text-xl font-bold text-blue-500">Brand</span>
+                </div>
+                <p className="text-gray-600 text-sm mb-4">
+                  Best information about the company gies here but now lorem ipsum is
+                </p>
+              </div>
+            </div>
+          </div>
+        </footer>
+
+        {(showLanguageDropdown || showShippingDropdown) && (
+          <div 
+            className="fixed inset-0 z-40" 
+            onClick={() => {
+              setShowLanguageDropdown(false);
+              setShowShippingDropdown(false);
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Home page (original content)
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -152,7 +499,10 @@ function App() {
                     placeholder="Search"
                     className="w-80 px-4 py-2 border-t border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
-                  <button className="bg-blue-500 text-white px-6 py-2 rounded-r hover:bg-blue-600 transition-colors">
+                  <button 
+                    onClick={handleNavigateToProducts}
+                    className="bg-blue-500 text-white px-6 py-2 rounded-r hover:bg-blue-600 transition-colors"
+                  >
                     Search
                   </button>
                 </div>
@@ -258,9 +608,12 @@ function App() {
               <ul className="space-y-3">
                 {categories.map((category) => (
                   <li key={category}>
-                    <a href="#" className="text-gray-600 hover:text-blue-500 text-sm">
+                    <button 
+                      onClick={handleNavigateToProducts}
+                      className="text-gray-600 hover:text-blue-500 text-sm text-left w-full"
+                    >
                       {category}
-                    </a>
+                    </button>
                   </li>
                 ))}
               </ul>
@@ -275,7 +628,10 @@ function App() {
                 <div className="relative z-10">
                   <h2 className="text-2xl font-bold mb-2 text-black">Latest trending</h2>
                   <h3 className="text-xl mb-4 text-black">Electronic items</h3>
-                  <button className="bg-white text-black text-teal-500 px-6 py-2 rounded font-medium hover:bg-gray-100 transition-colors">
+                  <button 
+                    onClick={handleNavigateToProducts}
+                    className="bg-white text-black text-teal-500 px-6 py-2 rounded font-medium hover:bg-gray-100 transition-colors"
+                  >
                     Learn more
                   </button>
                 </div>
@@ -324,7 +680,7 @@ function App() {
               </div>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 {deals.map((deal, index) => (
-                  <div key={index} className="text-center group cursor-pointer">
+                  <div key={index} className="text-center group cursor-pointer" onClick={handleNavigateToProducts}>
                     <div className="relative mb-3">
                       <div className="w-24 h-24 bg-gray-100 rounded-lg mx-auto overflow-hidden">
                         <img 
@@ -357,7 +713,10 @@ function App() {
                   </div>
                   <div className="relative z-10">
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Home and outdoor</h3>
-                    <button className="bg-white text-gray-900 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition-colors">
+                    <button 
+                      onClick={handleNavigateToProducts}
+                      className="bg-white text-gray-900 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
+                    >
                       Source now
                     </button>
                   </div>
@@ -374,7 +733,7 @@ function App() {
                 <div className="lg:col-span-2 p-4">
                   <div className="grid grid-cols-4 gap-3 h-full">
                     {homeProducts.map((product, index) => (
-                      <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer">
+                      <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
                         <div className="w-full h-16 bg-gray-50 rounded mb-2 overflow-hidden">
                           <img 
                             src={product.image} 
@@ -405,7 +764,10 @@ function App() {
                   </div>
                   <div className="relative z-10">
                     <h3 className="text-xl font-bold text-gray-900 mb-2">Consumer electronics and gadgets</h3>
-                    <button className="bg-white text-gray-900 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition-colors">
+                    <button 
+                      onClick={handleNavigateToProducts}
+                      className="bg-white text-gray-900 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
+                    >
                       Source now
                     </button>
                   </div>
@@ -422,7 +784,7 @@ function App() {
                 <div className="lg:col-span-2 p-4">
                   <div className="grid grid-cols-4 gap-3 h-full">
                     {electronicsProducts.map((product, index) => (
-                      <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer">
+                      <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
                         <div className="w-full h-16 bg-gray-50 rounded mb-2 overflow-hidden">
                           <img 
                             src={product.image} 
@@ -480,7 +842,7 @@ function App() {
               <h3 className="text-xl font-semibold mb-6">Recommended items</h3>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 {recommendedItems.map((item, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow group cursor-pointer">
+                  <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
                     <div className="w-full h-32 bg-gray-100 rounded mb-3 overflow-hidden">
                       <img 
                         src={item.image} 
