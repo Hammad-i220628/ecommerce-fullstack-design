@@ -994,7 +994,8 @@ function App() {
                 <li><a href="#" className="hover:text-blue-500">Settings</a></li>
                 <li><a href="#" className="hover:text-blue-500">My Orders</a></li>
               </ul>
-              <div>
+              {/* Get app Section */}
+            <div>
                 <h5 className="font-semibold text-gray-900 mb-2">Get app</h5>
                 <div className="space-y-2">
                   <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
