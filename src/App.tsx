@@ -358,67 +358,67 @@ function App() {
   ];
 
   const deals = [
-    { name: 'Smart watches', discount: '-25%', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=120&h=120&fit=crop&crop=center' },
-    { name: 'Laptops', discount: '-15%', image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=120&h=120&fit=crop&crop=center' },
-    { name: 'GoPro cameras', discount: '-40%', image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=120&h=120&fit=crop&crop=center' },
-    { name: 'Headphones', discount: '-25%', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=120&h=120&fit=crop&crop=center' },
-    { name: 'Canon cameras', discount: '-25%', image: 'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=120&h=120&fit=crop&crop=center' }
+    { name: 'Smart watches', discount: '-25%', image: '/tech/8.jpg' },
+    { name: 'Laptops', discount: '-15%', image: '/tech/7.jpg' },
+    { name: 'GoPro cameras', discount: '-40%', image: '/tech/6.jpg' },
+    { name: 'Headphones', discount: '-25%', image: '/tech/5.jpg' },
+    { name: 'Canon cameras', discount: '-25%', image: '/tech/3.jpg' }
   ];
 
   const homeProducts = [
-    { name: 'Soft chairs', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Sofa & chair', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Kitchen dishes', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Smart watches', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Kitchen mixer', price: 'From USD 100', image: 'https://images.unsplash.com/photo-1570222094114-d054a817e56b?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Blenders', price: 'From USD 39', image: 'https://images.unsplash.com/photo-1585515656643-808d6b69a52d?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Home appliance', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Coffee maker', price: 'From USD 10', image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=150&h=150&fit=crop&crop=center' }
+    { name: 'Soft chairs', price: 'From USD 19', image: '/interior/1.jpg' },
+    { name: 'Sofa & chair', price: 'From USD 19', image: '/interior/2.jpg' },
+    { name: 'Kitchen dishes', price: 'From USD 19', image: '/interior/3.jpg' },
+    { name: 'Smart watches', price: 'From USD 19', image: '/tech/8.jpg' },
+    { name: 'Kitchen mixer', price: 'From USD 100', image: '/interior/9.jpg' },
+    { name: 'Blenders', price: 'From USD 39', image: '/interior/8.jpg' },
+    { name: 'Home appliance', price: 'From USD 19', image: '/interior/6.jpg' },
+    { name: 'Coffee maker', price: 'From USD 10', image: '/interior/7.jpg' }
   ];
 
   const electronicsProducts = [
-    { name: 'Smart watches', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Cameras', price: 'From USD 89', image: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Headphones', price: 'From USD 10', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Smart watches', price: 'From USD 90', image: 'https://images.unsplash.com/photo-1579586337278-3f436f25d4d6?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Gaming set', price: 'From USD 35', image: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Laptops & PC', price: 'From USD 340', image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Smartphones', price: 'From USD 19', image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Electric kettle', price: 'From USD 240', image: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=150&h=150&fit=crop&crop=center' }
+    { name: 'Smart watches', price: 'From USD 19', image: '/tech/8.jpg' },
+    { name: 'Cameras', price: 'From USD 89', image: '/tech/6.jpg' },
+    { name: 'Headphones', price: 'From USD 10', image: '/tech/9.jpg' },
+    { name: 'Smartphones', price: 'From USD 90', image: '/tech/4.jpg' },
+    { name: 'Gaming set', price: 'From USD 35', image: '/tech/5.jpg' },
+    { name: 'Laptops & PC', price: 'From USD 340', image: '/tech/7.jpg' },
+    { name: 'Smartphones', price: 'From USD 19', image: '/tech/1.jpg' },
+    { name: 'Electric kettle', price: 'From USD 240', image: '/tech/10.jpg' }
   ];
 
   const recommendedItems = [
-    { name: 'T-shirts with multiple colors, for men', price: '$10.30', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Jeans shorts for men blue color', price: '$10.30', image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Brown winter coat medium size', price: '$12.50', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Jeans bag for travel for men', price: '$34.00', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Leather wallet', price: '$99.00', image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Canon camera black, 100x zoom', price: '$9.99', image: 'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Headset for gaming with mic', price: '$8.99', image: 'https://images.unsplash.com/photo-1599669454699-248893623440?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Smartwatch silver color modern', price: '$10.30', image: 'https://images.unsplash.com/photo-1579586337278-3f436f25d4d6?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Blue wallet for men, leather material', price: '$10.30', image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=150&h=150&fit=crop&crop=center' },
-    { name: 'Jeans bag for travel for men', price: '$80.95', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=150&h=150&fit=crop&crop=center' }
+    { name: 'T-shirts with multiple colors, for men', price: '$10.30', image: '/cloth/1.jpg' },
+    { name: 'Jeans shorts for men blue color', price: '$10.30', image: '/cloth/2.jpg' },
+    { name: 'Brown winter coat medium size', price: '$12.50', image: '/cloth/3.jpg' },
+    { name: 'Jeans bag for travel for men', price: '$34.00', image: '/cloth/4.jpg' },
+    { name: 'Leather wallet', price: '$99.00', image: '/cloth/5.jpg' },
+    { name: 'Canon camera black, 100x zoom', price: '$9.99', image: '/tech/5.jpg' },
+    { name: 'Headset for gaming with mic', price: '$8.99', image: '/tech/4.jpg' },
+    { name: 'Smartwatch silver color modern', price: '$10.30', image: '/tech/6.jpg' },
+    { name: 'Blue wallet for men, leather material', price: '$10.30', image: '/cloth/6.jpg' },
+    { name: 'Jeans bag for travel for men', price: '$80.95', image: '/cloth/7.jpg' }
   ];
 
   const services = [
     {
       title: 'Source from Industry Hubs',
-      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=300&h=200&fit=crop&crop=center',
+      image: '/interior/8.jpg',
       icon: Search
     },
     {
       title: 'Customize Your Products',
-      image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=200&fit=crop&crop=center',
+      image: '/interior/9.jpg',
       icon: Eye
     },
     {
       title: 'Fast, reliable shipping by ocean or air',
-      image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=200&fit=crop&crop=center',
+      image: '/interior/10.jpg',
       icon: Truck
     },
     {
       title: 'Product monitoring and inspection',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=200&fit=crop&crop=center',
+      image: '/tech/10.jpg',
       icon: Shield
     }
   ];
@@ -620,7 +620,7 @@ function App() {
                 <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 p-6 flex flex-col justify-between">
                   <div className="absolute inset-0 opacity-20">
                     <img
-                      src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop&crop=center"
+                      src="/interior/1.jpg"
                       alt="Home and outdoor background"
                       className="w-full h-full object-cover"
                     />
@@ -636,7 +636,7 @@ function App() {
                   </div>
                   <div className="relative z-10">
                     <img
-                      src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=150&fit=crop&crop=center"
+                      src="/interior/2.jpg"
                       alt="Featured product"
                       className="w-32 h-24 object-cover rounded opacity-80"
                     />
@@ -668,7 +668,7 @@ function App() {
                 <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-6 flex flex-col justify-between">
                   <div className="absolute inset-0 opacity-20">
                     <img
-                      src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=400&h=300&fit=crop&crop=center"
+                      src="/tech/7.jpg"
                       alt="Electronics background"
                       className="w-full h-full object-cover"
                     />
@@ -684,7 +684,7 @@ function App() {
                   </div>
                   <div className="relative z-10">
                     <img
-                      src="https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=200&h=150&fit=crop&crop=center"
+                      src="/tech/8.jpg"
                       alt="Featured electronics"
                       className="w-32 h-24 object-cover rounded opacity-80"
                     />

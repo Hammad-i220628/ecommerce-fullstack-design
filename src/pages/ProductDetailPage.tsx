@@ -33,12 +33,12 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onBack
       warranty: '2 years full warranty'
     },
     images: [
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&crop=center',
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&crop=center',
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&crop=center',
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&crop=center',
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&crop=center',
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&crop=center'
+      '/cloth/1.jpg',
+      '/cloth/2.jpg',
+      '/cloth/3.jpg',
+      '/cloth/4.jpg',
+      '/cloth/5.jpg',
+      '/cloth/6.jpg'
     ],
     supplier: {
       name: 'Guanjoi Trading LLC',
@@ -57,37 +57,37 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onBack
         id: '1',
         name: 'Xiaomi Redmi 8 Original',
         price: '$32.00-$40.00',
-        image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=150&h=150&fit=crop&crop=center'
+        image: '/tech/8.jpg'
       },
       {
         id: '2',
-        name: 'Xiaomi Redmi 8 Original',
+        name: 'Apple Watch Series',
         price: '$32.00-$40.00',
-        image: 'https://images.unsplash.com/photo-1579586337278-3f436f25d4d6?w=150&h=150&fit=crop&crop=center'
+        image: '/tech/1.jpg'
       },
       {
         id: '3',
-        name: 'Xiaomi Redmi 8 Original',
+        name: 'Gaming Headphones',
         price: '$32.00-$40.00',
-        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=150&h=150&fit=crop&crop=center'
+        image: '/tech/4.jpg'
       },
       {
         id: '4',
-        name: 'Xiaomi Redmi 8 Original',
+        name: 'Jeans Shorts for Men',
         price: '$32.00-$40.00',
-        image: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=150&h=150&fit=crop&crop=center'
+        image: '/cloth/2.jpg'
       },
       {
         id: '5',
-        name: 'Xiaomi Redmi 8 Original',
+        name: 'Winter Coat Brown',
         price: '$32.00-$40.00',
-        image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=150&h=150&fit=crop&crop=center'
+        image: '/cloth/3.jpg'
       },
       {
         id: '6',
-        name: 'Xiaomi Redmi 8 Original',
+        name: 'Leather Wallet',
         price: '$32.00-$40.00',
-        image: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=150&h=150&fit=crop&crop=center'
+        image: '/cloth/5.jpg'
       }
     ],
     youMayLike: [
@@ -95,31 +95,31 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onBack
         id: '1',
         name: 'Men Blazers Sets Elegant Formal',
         price: '$7.00 - $99.50',
-        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=center'
+        image: '/cloth/7.jpg'
       },
       {
         id: '2',
         name: 'Men Shirt Sleeve Polo Contrast',
         price: '$7.00 - $99.50',
-        image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=150&h=150&fit=crop&crop=center'
+        image: '/cloth/1.jpg'
       },
       {
         id: '3',
         name: 'Apple Watch Series Space Gray',
         price: '$7.00 - $99.50',
-        image: 'https://images.unsplash.com/photo-1579586337278-3f436f25d4d6?w=150&h=150&fit=crop&crop=center'
+        image: '/tech/1.jpg'
       },
       {
         id: '4',
         name: 'Basketball Crew Socks Long Stuff',
         price: '$7.00 - $99.50',
-        image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=150&h=150&fit=crop&crop=center'
+        image: '/cloth/3.jpg'
       },
       {
         id: '5',
         name: 'New Summer Men\'s castrol T-Shirts',
         price: '$7.00 - $99.50',
-        image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=150&h=150&fit=crop&crop=center'
+        image: '/cloth/1.jpg'
       }
     ]
   };
@@ -259,7 +259,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onBack
 
               <div className="space-y-3 mb-6">
                 <div className="flex items-center space-x-2">
-                  <img src="https://flagcdn.com/w20/de.png" alt="Germany" className="w-5 h-4" />
+                  <img src="/flags/Property 1=DE.png" alt="Germany" className="w-5 h-4" />
                   <span className="text-sm text-gray-600">{product.supplier.location}</span>
                 </div>
                 {product.supplier.verified && (
