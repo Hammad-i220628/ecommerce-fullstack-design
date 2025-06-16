@@ -771,8 +771,8 @@ function AppContent() {
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="grid grid-cols-1 lg:grid-cols-3 h-64">
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden h-200">
+              <div className="grid grid-cols-1 lg:grid-cols-3 h-220">
                 <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 p-6 flex flex-col justify-between">
                   <div className="absolute inset-0 opacity-20">
                     <img
@@ -790,16 +790,9 @@ function AppContent() {
                       Source now
                     </button>
                   </div>
-                  <div className="relative z-10">
-                    <img
-                      src="/interior/2.jpg"
-                      alt="Featured product"
-                      className="w-32 h-24 object-cover rounded opacity-80"
-                    />
-                  </div>
                 </div>
 
-                <div className="lg:col-span-2 p-4">
+                <div className="lg:col-span-2 p-120">
                   <div className="grid grid-cols-4 gap-3 h-full">
                     {homeProducts.map((product, index) => (
                       <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
@@ -820,7 +813,7 @@ function AppContent() {
             </div>
 
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="grid grid-cols-1 lg:grid-cols-3 h-64">
+              <div className="grid grid-cols-1 lg:grid-cols-3 h-30">
                 <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-6 flex flex-col justify-between">
                   <div className="absolute inset-0 opacity-20">
                     <img
@@ -837,13 +830,6 @@ function AppContent() {
                     >
                       Source now
                     </button>
-                  </div>
-                  <div className="relative z-10">
-                    <img
-                      src="/tech/8.jpg"
-                      alt="Featured electronics"
-                      className="w-32 h-24 object-cover rounded opacity-80"
-                    />
                   </div>
                 </div>
 

@@ -218,27 +218,12 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
                 Checkout
               </button>
 
-              <div className="flex justify-center space-x-2 mb-6">
-                <img src="/api/placeholder/30/20" alt="Visa" className="h-5" />
-                <img src="/api/placeholder/30/20" alt="Mastercard" className="h-5" />
-                <img src="/api/placeholder/30/20" alt="PayPal" className="h-5" />
-                <img src="/api/placeholder/30/20" alt="Apple Pay" className="h-5" />
-              </div>
-
-              {/* Trust Badges */}
-              <div className="space-y-3 text-sm text-gray-600">
-                <div className="flex items-center space-x-2">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  <span>Secure payment</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <MessageSquare className="w-4 h-4 text-blue-500" />
-                  <span>Customer support</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Truck className="w-4 h-4 text-orange-500" />
-                  <span>Free delivery</span>
-                </div>
+              <div className="flex justify-center space-x-3 mb-6">
+                <img src="/payment/1.png" alt="Visa" className="h-6 object-contain" />
+                <img src="/payment/2.png" alt="Mastercard" className="h-6 object-contain" />
+                <img src="/payment/3.png" alt="PayPal" className="h-6 object-contain" />
+                <img src="/payment/4.png" alt="Apple Pay" className="h-6 object-contain" />
+                <img src="/payment/5.png" alt="Google Pay" className="h-6 object-contain" />
               </div>
             </div>
           </div>
