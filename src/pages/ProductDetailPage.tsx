@@ -314,57 +314,75 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onBack
 
           <div className="p-6">
             {activeTab === 'description' && (
-              <div className="space-y-6">
-                <div>
-                  <p className="text-gray-700 mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                    nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua.
-                  </p>
-                  <p className="text-gray-700 mb-6">
-                    Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="space-y-6">
                   <div>
-                    <table className="w-full text-sm">
-                      <tbody className="space-y-2">
-                        <tr>
-                          <td className="py-2 text-gray-600">Model</td>
-                          <td className="py-2 text-gray-900">#9786867</td>
-                        </tr>
-                        <tr>
-                          <td className="py-2 text-gray-600">Style</td>
-                          <td className="py-2 text-gray-900">Classic style</td>
-                        </tr>
-                        <tr>
-                          <td className="py-2 text-gray-600">Certificate</td>
-                          <td className="py-2 text-gray-900">ISO-898921212</td>
-                        </tr>
-                        <tr>
-                          <td className="py-2 text-gray-600">Size</td>
-                          <td className="py-2 text-gray-900">34mm x 450mm x 19mm</td>
-                        </tr>
-                        <tr>
-                          <td className="py-2 text-gray-600">Memory</td>
-                          <td className="py-2 text-gray-900">36GB RAM</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <p className="text-gray-700 mb-4">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                      dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                      nulla pariatur. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                      labore et dolore magna aliqua.
+                    </p>
+                    <p className="text-gray-700 mb-6">
+                      Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                      reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                    </p>
                   </div>
-                  <div>
-                    <ul className="space-y-2">
-                      {product.features.map((feature, index) => (
-                        <li key={index} className="flex items-center space-x-2">
-                          <span className="text-green-500">✓</span>
-                          <span className="text-gray-700">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <table className="w-full text-sm">
+                        <tbody className="space-y-2">
+                          <tr>
+                            <td className="py-2 text-gray-600">Model</td>
+                            <td className="py-2 text-gray-900">#9786867</td>
+                          </tr>
+                          <tr>
+                            <td className="py-2 text-gray-600">Style</td>
+                            <td className="py-2 text-gray-900">Classic style</td>
+                          </tr>
+                          <tr>
+                            <td className="py-2 text-gray-600">Certificate</td>
+                            <td className="py-2 text-gray-900">ISO-898921212</td>
+                          </tr>
+                          <tr>
+                            <td className="py-2 text-gray-600">Size</td>
+                            <td className="py-2 text-gray-900">34mm x 450mm x 19mm</td>
+                          </tr>
+                          <tr>
+                            <td className="py-2 text-gray-600">Memory</td>
+                            <td className="py-2 text-gray-900">36GB RAM</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div>
+                      <ul className="space-y-2">
+                        {product.features.map((feature, index) => (
+                          <li key={index} className="flex items-center space-x-2">
+                            <span className="text-green-500">✓</span>
+                            <span className="text-gray-700">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">You may like</h3>
+                  <div className="space-y-4">
+                    {product.youMayLike.map((item) => (
+                      <div key={item.id} className="flex items-center space-x-4 p-3 hover:bg-gray-50 rounded-lg">
+                        <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                          <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-sm font-medium text-gray-900">{item.name}</h4>
+                          <p className="text-sm text-gray-600">{item.price}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -383,24 +401,6 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onBack
                 </div>
                 <h4 className="text-sm font-medium text-gray-900 mb-2 line-clamp-2">{item.name}</h4>
                 <p className="text-sm text-gray-600">{item.price}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* You may like */}
-        <div className="bg-white rounded-lg p-6 mt-8">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">You may like</h3>
-          <div className="space-y-4">
-            {product.youMayLike.map((item) => (
-              <div key={item.id} className="flex items-center space-x-4 p-3 hover:bg-gray-50 rounded-lg">
-                <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden flex-shrink-0">
-                  <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                </div>
-                <div className="flex-1">
-                  <h4 className="text-sm font-medium text-gray-900">{item.name}</h4>
-                  <p className="text-sm text-gray-600">{item.price}</p>
-                </div>
               </div>
             ))}
           </div>
