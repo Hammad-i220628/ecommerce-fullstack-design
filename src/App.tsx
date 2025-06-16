@@ -4,8 +4,13 @@ import { Facebook, Twitter, Linkedin, Instagram, Youtube } from 'lucide-react';
 import FlagIcon from './components/FlagIcon';
 import ProductListPage from './pages/ProductListPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
+import WishlistPage from './pages/WishlistPage';
+import ProfilePage from './pages/ProfilePage';
+import MessagesPage from './pages/MessagesPage';
+import { AppProvider, useApp } from './context/AppContext';
 
-type CurrentPage = 'home' | 'products' | 'product-detail';
+type CurrentPage = 'home' | 'products' | 'product-detail' | 'cart' | 'wishlist' | 'profile' | 'messages';
 
 interface HeaderProps {
   selectedCategory: string;
@@ -23,6 +28,10 @@ interface HeaderProps {
   shippingOptions: { country: string; flag: string }[];
   onHomeClick: () => void;
   onSearchClick: () => void;
+  onCartClick: () => void;
+  onWishlistClick: () => void;
+  onProfileClick: () => void;
+  onMessagesClick: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -41,133 +50,179 @@ const Header: React.FC<HeaderProps> = ({
   shippingOptions,
   onHomeClick,
   onSearchClick,
-}) => (
-  <header className="bg-white shadow-sm">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex items-center justify-between h-16">
-        <div className="flex items-center space-x-8">
-          <div className="flex items-center space-x-2 cursor-pointer" onClick={onHomeClick}>
-            <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-sm">B</span>
-            </div>
-            <span className="text-xl font-bold text-blue-500">Brand</span>
-          </div>
-
-          <div className="hidden md:flex items-center space-x-4">
-            <div className="relative">
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="appearance-none bg-white border border-gray-300 rounded-l px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {categories.map((category) => (
-                  <option key={category} value={category}>{category}</option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            </div>
-            <div className="flex">
-              <input
-                type="text"
-                placeholder="Search"
-                className="w-80 px-4 py-2 border-t border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
-                onClick={onSearchClick}
-                className="bg-blue-500 text-white px-6 py-2 rounded-r hover:bg-blue-600 transition-colors"
-              >
-                Search
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-6">
-          <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
-            <div className="relative">
-              <button
-                onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
-                className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer"
-              >
-                <span>{selectedLanguage}</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              {showLanguageDropdown && (
-                <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px]">
-                  {languageOptions.map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => {
-                        setSelectedLanguage(option);
-                        setShowLanguageDropdown(false);
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="relative">
-              <button
-                onClick={() => setShowShippingDropdown(!showShippingDropdown)}
-                className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer"
-              >
-                <span>Ship to</span>
-                <FlagIcon country={selectedShipping} className="w-5 h-4 rounded" />
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              {showShippingDropdown && (
-                <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px]">
-                  {shippingOptions.map((option) => (
-                    <button
-                      key={option.country}
-                      onClick={() => {
-                        setSelectedShipping(option.country);
-                        setShowShippingDropdown(false);
-                      }}
-                      className="flex items-center space-x-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
-                    >
-                      <FlagIcon country={option.flag} className="w-5 h-4 rounded" />
-                      <span>{option.country}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            <User className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
-            <MessageSquare className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
-            <Heart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
-            <ShoppingCart className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500" />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div className="border-t border-gray-200">
+  onCartClick,
+  onWishlistClick,
+  onProfileClick,
+  onMessagesClick,
+}) => {
+  const { state } = useApp();
+  
+  return (
+    <header className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center space-x-8 h-12 text-sm">
-          <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-500">
-            <Menu className="w-4 h-4" />
-            <span>All category</span>
-          </button>
-          <a href="#" className="text-gray-700 hover:text-blue-500">Hot offers</a>
-          <a href="#" className="text-gray-700 hover:text-blue-500">Gift boxes</a>
-          <a href="#" className="text-gray-700 hover:text-blue-500">Projects</a>
-          <a href="#" className="text-gray-700 hover:text-blue-500">Menu item</a>
-          <div className="flex items-center space-x-1 text-gray-700 hover:text-blue-500 cursor-pointer">
-            <span>Help</span>
-            <ChevronDown className="w-4 h-4" />
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-2 cursor-pointer" onClick={onHomeClick}>
+              <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
+                <span className="text-white font-bold text-sm">B</span>
+              </div>
+              <span className="text-xl font-bold text-blue-500">Brand</span>
+            </div>
+
+            <div className="hidden md:flex items-center space-x-4">
+              <div className="relative">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="appearance-none bg-white border border-gray-300 rounded-l px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {categories.map((category) => (
+                    <option key={category} value={category}>{category}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              </div>
+              <div className="flex">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="w-80 px-4 py-2 border-t border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={onSearchClick}
+                  className="bg-blue-500 text-white px-6 py-2 rounded-r hover:bg-blue-600 transition-colors"
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-6">
+            <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
+              <div className="relative">
+                <button
+                  onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+                  className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer"
+                >
+                  <span>{selectedLanguage}</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                {showLanguageDropdown && (
+                  <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[140px]">
+                    {languageOptions.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => {
+                          setSelectedLanguage(option);
+                          setShowLanguageDropdown(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowShippingDropdown(!showShippingDropdown)}
+                  className="flex items-center space-x-1 hover:text-blue-500 cursor-pointer"
+                >
+                  <span>Ship to</span>
+                  <FlagIcon country={selectedShipping} className="w-5 h-4 rounded" />
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                {showShippingDropdown && (
+                  <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 min-w-[160px]">
+                    {shippingOptions.map((option) => (
+                      <button
+                        key={option.country}
+                        onClick={() => {
+                          setSelectedShipping(option.country);
+                          setShowShippingDropdown(false);
+                        }}
+                        className="flex items-center space-x-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 first:rounded-t-lg last:rounded-b-lg"
+                      >
+                        <FlagIcon country={option.flag} className="w-5 h-4 rounded" />
+                        <span>{option.country}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <button 
+                onClick={onProfileClick}
+                className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500"
+                title="Profile"
+              >
+                <User className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={onMessagesClick}
+                className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500 relative"
+                title="Messages"
+              >
+                <MessageSquare className="w-5 h-5" />
+                {/* Notification badge for unread messages */}
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                  3
+                </span>
+              </button>
+              <button 
+                onClick={onWishlistClick}
+                className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500 relative"
+                title="Wishlist"
+              >
+                <Heart className="w-5 h-5" />
+                {state.wishlist.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                    {state.wishlist.length}
+                  </span>
+                )}
+              </button>
+              <button 
+                onClick={onCartClick}
+                className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500 relative"
+                title="My Cart"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {state.cart.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                    {state.cart.length}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </header>
-);
+
+      <div className="border-t border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center space-x-8 h-12 text-sm">
+            <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-500">
+              <Menu className="w-4 h-4" />
+              <span>All category</span>
+            </button>
+            <a href="#" className="text-gray-700 hover:text-blue-500">Hot offers</a>
+            <a href="#" className="text-gray-700 hover:text-blue-500">Gift boxes</a>
+            <a href="#" className="text-gray-700 hover:text-blue-500">Projects</a>
+            <a href="#" className="text-gray-700 hover:text-blue-500">Menu item</a>
+            <div className="flex items-center space-x-1 text-gray-700 hover:text-blue-500 cursor-pointer">
+              <span>Help</span>
+              <ChevronDown className="w-4 h-4" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
 
 interface FooterProps {
   showCountryDropdown: boolean;
@@ -181,140 +236,149 @@ const Footer: React.FC<FooterProps> = ({
   showCountryDropdown,
   setShowCountryDropdown,
   selectedCountry,
+  setSelectedCountry,
   countries,
-}) => (
-  <footer className="bg-white border-t border-gray-200">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-8">
-        {/* Brand Section */}
-        <div className="md:col-span-1">
-          <div className="flex items-center space-x-2 mb-4">
-            <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
-              <span className="text-white font-bold text-sm">B</span>
+}) => {
+  const handleCountrySelect = (country: string) => {
+    setSelectedCountry(country);
+    setShowCountryDropdown(false);
+  };
+
+  return (
+    <footer className="bg-white border-t border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-8">
+          {/* Brand Section */}
+          <div className="md:col-span-1">
+            <div className="flex items-center space-x-2 mb-4">
+              <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
+                <span className="text-white font-bold text-sm">B</span>
+              </div>
+              <span className="text-xl font-bold text-blue-500">Brand</span>
             </div>
-            <span className="text-xl font-bold text-blue-500">Brand</span>
-          </div>
-          <div className="flex space-x-3">
-            <a href="#" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700">
-              <Facebook className="w-4 h-4" />
-            </a>
-            <a href="#" className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white hover:bg-gray-800">
-              <Twitter className="w-4 h-4" />
-            </a>
-            <a href="#" className="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center text-white hover:bg-blue-800">
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <a href="#" className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white hover:bg-pink-600">
-              <Instagram className="w-4 h-4" />
-            </a>
-            <a href="#" className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white hover:bg-red-700">
-              <Youtube className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-
-        {/* About Section */}
-        <div>
-          <h3 className="font-semibold text-gray-900 mb-4">About</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li><a href="#" className="hover:text-blue-600">About Us</a></li>
-            <li><a href="#" className="hover:text-blue-600">Find store</a></li>
-            <li><a href="#" className="hover:text-blue-600">Categories</a></li>
-            <li><a href="#" className="hover:text-blue-600">Blogs</a></li>
-          </ul>
-        </div>
-
-        {/* Partnership Section */}
-        <div>
-          <h3 className="font-semibold text-gray-900 mb-4">Partnership</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li><a href="#" className="hover:text-blue-600">About Us</a></li>
-            <li><a href="#" className="hover:text-blue-600">Find store</a></li>
-            <li><a href="#" className="hover:text-blue-600">Categories</a></li>
-            <li><a href="#" className="hover:text-blue-600">Blogs</a></li>
-          </ul>
-        </div>
-
-        {/* Information Section */}
-        <div>
-          <h3 className="font-semibold text-gray-900 mb-4">Information</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li><a href="#" className="hover:text-blue-600">Help Center</a></li>
-            <li><a href="#" className="hover:text-blue-600">Money Refund</a></li>
-            <li><a href="#" className="hover:text-blue-600">Shipping</a></li>
-            <li><a href="#" className="hover:text-blue-600">Contact us</a></li>
-          </ul>
-        </div>
-
-        {/* For Users Section */}
-        <div>
-          <h3 className="font-semibold text-gray-900 mb-4">For users</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li><a href="#" className="hover:text-blue-600">Login</a></li>
-            <li><a href="#" className="hover:text-blue-600">Register</a></li>
-            <li><a href="#" className="hover:text-blue-600">Settings</a></li>
-            <li><a href="#" className="hover:text-blue-600">My Orders</a></li>
-          </ul>
-        </div>
-
-        {/* Get app Section */}
-        <div>
-          <h5 className="font-semibold text-gray-900 mb-2">Get app</h5>
-          <div className="space-y-2">
-            <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-              </svg>
-              <span className="text-white text-xs">App Store</span>
-            </div>
-            <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.833 12l1.865-1.865zM5.864 2.658L16.802 8.99l-2.302 2.302-8.636-8.634z"/>
-              </svg>
-              <span className="text-white text-xs">Google Play</span>
+            <div className="flex space-x-3">
+              <a href="#" className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700">
+                <Facebook className="w-4 h-4" />
+              </a>
+              <a href="#" className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white hover:bg-gray-800">
+                <Twitter className="w-4 h-4" />
+              </a>
+              <a href="#" className="w-8 h-8 bg-blue-700 rounded-full flex items-center justify-center text-white hover:bg-blue-800">
+                <Linkedin className="w-4 h-4" />
+              </a>
+              <a href="#" className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white hover:bg-pink-600">
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a href="#" className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white hover:bg-red-700">
+                <Youtube className="w-4 h-4" />
+              </a>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* Bottom Footer */}
-      <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-        <div className="text-sm text-gray-600">
-          © 2023 Ecommerce.
-        </div>
-        <div className="relative mt-4 md:mt-0">
-          <button
-            onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-            className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <FlagIcon country={selectedCountry} className="w-5 h-4" />
-            <span className="text-sm text-gray-700">{selectedCountry}</span>
-            <ChevronDown className="w-4 h-4 text-gray-600" />
-          </button>
-          
-          {showCountryDropdown && (
-            <div className="absolute bottom-full right-0 mb-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-              <div className="py-2">
-                {countries.map((country) => (
-                  <button
-                    key={country}
-                    onClick={() => handleCountrySelect(country)}
-                    className="flex items-center space-x-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    <FlagIcon country={country} className="w-5 h-4" />
-                    <span>{country}</span>
-                  </button>
-                ))}
+          {/* About Section */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">About</h3>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li><a href="#" className="hover:text-blue-600">About Us</a></li>
+              <li><a href="#" className="hover:text-blue-600">Find store</a></li>
+              <li><a href="#" className="hover:text-blue-600">Categories</a></li>
+              <li><a href="#" className="hover:text-blue-600">Blogs</a></li>
+            </ul>
+          </div>
+
+          {/* Partnership Section */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Partnership</h3>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li><a href="#" className="hover:text-blue-600">About Us</a></li>
+              <li><a href="#" className="hover:text-blue-600">Find store</a></li>
+              <li><a href="#" className="hover:text-blue-600">Categories</a></li>
+              <li><a href="#" className="hover:text-blue-600">Blogs</a></li>
+            </ul>
+          </div>
+
+          {/* Information Section */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">Information</h3>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li><a href="#" className="hover:text-blue-600">Help Center</a></li>
+              <li><a href="#" className="hover:text-blue-600">Money Refund</a></li>
+              <li><a href="#" className="hover:text-blue-600">Shipping</a></li>
+              <li><a href="#" className="hover:text-blue-600">Contact us</a></li>
+            </ul>
+          </div>
+
+          {/* For Users Section */}
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-4">For users</h3>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li><a href="#" className="hover:text-blue-600">Login</a></li>
+              <li><a href="#" className="hover:text-blue-600">Register</a></li>
+              <li><a href="#" className="hover:text-blue-600">Settings</a></li>
+              <li><a href="#" className="hover:text-blue-600">My Orders</a></li>
+            </ul>
+          </div>
+
+          {/* Get app Section */}
+          <div>
+            <h5 className="font-semibold text-gray-900 mb-2">Get app</h5>
+            <div className="space-y-2">
+              <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+                <span className="text-white text-xs">App Store</span>
+              </div>
+              <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.833 12l1.865-1.865zM5.864 2.658L16.802 8.99l-2.302 2.302-8.636-8.634z"/>
+                </svg>
+                <span className="text-white text-xs">Google Play</span>
               </div>
             </div>
-          )}
+          </div>
+        </div>
+
+        {/* Bottom Footer */}
+        <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <div className="text-sm text-gray-600">
+            © 2023 Ecommerce.
+          </div>
+          <div className="relative mt-4 md:mt-0">
+            <button
+              onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+              className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <FlagIcon country={selectedCountry} className="w-5 h-4" />
+              <span className="text-sm text-gray-700">{selectedCountry}</span>
+              <ChevronDown className="w-4 h-4 text-gray-600" />
+            </button>
+            
+            {showCountryDropdown && (
+              <div className="absolute bottom-full right-0 mb-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                <div className="py-2">
+                  {countries.map((country) => (
+                    <button
+                      key={country}
+                      onClick={() => handleCountrySelect(country)}
+                      className="flex items-center space-x-3 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <FlagIcon country={country} className="w-5 h-4" />
+                      <span>{country}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};
 
-function App() {
+function AppContent() {
+  const { state, dispatch } = useApp();
   const [currentPage, setCurrentPage] = useState<CurrentPage>('home');
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState('All category');
@@ -453,6 +517,22 @@ function App() {
     setCurrentPage('products');
   };
 
+  const handleNavigateToCart = () => {
+    setCurrentPage('cart');
+  };
+
+  const handleNavigateToWishlist = () => {
+    setCurrentPage('wishlist');
+  };
+
+  const handleNavigateToProfile = () => {
+    setCurrentPage('profile');
+  };
+
+  const handleNavigateToMessages = () => {
+    setCurrentPage('messages');
+  };
+
   const handleCountrySelect = (country: string) => {
     setSelectedCountry(country);
     setShowCountryDropdown(false);
@@ -475,6 +555,10 @@ function App() {
     shippingOptions,
     onHomeClick: handleBackToHome,
     onSearchClick: handleNavigateToProducts,
+    onCartClick: handleNavigateToCart,
+    onWishlistClick: handleNavigateToWishlist,
+    onProfileClick: handleNavigateToProfile,
+    onMessagesClick: handleNavigateToMessages,
   };
 
   // Common footer props
@@ -487,6 +571,78 @@ function App() {
   };
 
   // Render different pages based on current page
+  if (currentPage === 'cart') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header {...headerProps} />
+        <CartPage onBackToHome={handleBackToHome} />
+        {(showLanguageDropdown || showShippingDropdown) && (
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => {
+              setShowLanguageDropdown(false);
+              setShowShippingDropdown(false);
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
+  if (currentPage === 'wishlist') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header {...headerProps} />
+        <WishlistPage onBackToHome={handleBackToHome} onProductClick={handleProductClick} />
+        {(showLanguageDropdown || showShippingDropdown) && (
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => {
+              setShowLanguageDropdown(false);
+              setShowShippingDropdown(false);
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
+  if (currentPage === 'profile') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header {...headerProps} />
+        <ProfilePage onBackToHome={handleBackToHome} />
+        {(showLanguageDropdown || showShippingDropdown) && (
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => {
+              setShowLanguageDropdown(false);
+              setShowShippingDropdown(false);
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
+  if (currentPage === 'messages') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header {...headerProps} />
+        <MessagesPage onBackToHome={handleBackToHome} />
+        {(showLanguageDropdown || showShippingDropdown) && (
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => {
+              setShowLanguageDropdown(false);
+              setShowShippingDropdown(false);
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+
   if (currentPage === 'products') {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -834,6 +990,14 @@ function App() {
 
       <Footer {...footerProps} />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AppProvider>
+      <AppContent />
+    </AppProvider>
   );
 }
 

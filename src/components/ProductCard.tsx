@@ -1,5 +1,6 @@
 import React from 'react';
 import { Heart, Star } from 'lucide-react';
+import { useApp } from '../context/AppContext';
 
 interface Product {
   id: string;
@@ -11,6 +12,9 @@ interface Product {
   image: string;
   freeShipping?: boolean;
   description?: string;
+  category: string;
+  brand: string;
+  features: string[];
 }
 
 interface ProductCardProps {
@@ -20,6 +24,33 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductClick }) => {
+  const { state, dispatch } = useApp();
+  
+  const isInWishlist = state.wishlist.some(item => item.product.id === product.id);
+
+  const toggleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isInWishlist) {
+      const wishlistItem = state.wishlist.find(item => item.product.id === product.id);
+      if (wishlistItem) {
+        dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: wishlistItem.id });
+      }
+    } else {
+      dispatch({ type: 'ADD_TO_WISHLIST', payload: product });
+    }
+  };
+
+  const addToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    dispatch({ 
+      type: 'ADD_TO_CART', 
+      payload: { 
+        product, 
+        quantity: 1 
+      } 
+    });
+  };
+
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
@@ -78,8 +109,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
                 )}
               </div>
               <div className="flex flex-col items-end space-y-2 ml-4">
-                <button className="p-2 text-gray-400 hover:text-red-500 transition-colors">
-                  <Heart className="w-5 h-5" />
+                <button 
+                  onClick={toggleWishlist}
+                  className={`p-2 transition-colors ${
+                    isInWishlist ? 'text-red-500' : 'text-gray-400 hover:text-red-500'
+                  }`}
+                >
+                  <Heart className={`w-5 h-5 ${isInWishlist ? 'fill-current' : ''}`} />
+                </button>
+                <button
+                  onClick={addToCart}
+                  className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors"
+                >
+                  Add to Cart
                 </button>
               </div>
             </div>
@@ -100,8 +142,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
             onClick={() => onProductClick(product.id)}
           />
         </div>
-        <button className="absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-sm text-gray-400 hover:text-red-500 transition-colors">
-          <Heart className="w-4 h-4" />
+        <button 
+          onClick={toggleWishlist}
+          className={`absolute top-2 right-2 p-1.5 bg-white rounded-full shadow-sm transition-colors ${
+            isInWishlist ? 'text-red-500' : 'text-gray-400 hover:text-red-500'
+          }`}
+        >
+          <Heart className={`w-4 h-4 ${isInWishlist ? 'fill-current' : ''}`} />
         </button>
       </div>
       <div className="space-y-2">
@@ -125,6 +172,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
         >
           {product.name}
         </h3>
+        <button
+          onClick={addToCart}
+          className="w-full bg-blue-500 text-white py-2 rounded text-sm hover:bg-blue-600 transition-colors"
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   );
