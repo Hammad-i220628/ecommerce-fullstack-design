@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, List, ChevronDown, Filter, Facebook, Twitter, Linkedin, Instagram, Youtube, Heart, Star } from 'lucide-react';
+import { Grid, List, ChevronDown, Filter, Facebook, Twitter, Linkedin, Instagram, Youtube, Heart, Star, Menu, X } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import FlagIcon from '../components/FlagIcon';
 
@@ -31,6 +31,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
   const [expandedSections, setExpandedSections] = useState<string[]>(['category', 'brands', 'features']);
   const [selectedCountry, setSelectedCountry] = useState('United States');
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   const products: Product[] = [
     {
@@ -194,205 +195,222 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
     setShowCountryDropdown(false);
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation */}
-      <div className="bg-white border-b border-gray-200">
-   
+  const FilterSidebar = () => (
+    <div className="bg-white rounded border border-gray-200">
+      {/* Category */}
+      <div className="p-4 border-b border-gray-200">
+        <button
+          onClick={() => toggleSection('category')}
+          className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
+        >
+          <span>Category</span>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform ${
+              expandedSections.includes('category') ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+        {expandedSections.includes('category') && (
+          <div className="space-y-2">
+            {categories.map((category) => (
+              <div key={category.id} className={`text-sm py-1 px-2 rounded cursor-pointer ${
+                category.active ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'
+              }`}>
+                {category.label}
+              </div>
+            ))}
+            <button className="text-sm text-blue-600 hover:text-blue-800 mt-2">See all</button>
+          </div>
+        )}
       </div>
 
+      {/* Brands */}
+      <div className="p-4 border-b border-gray-200">
+        <button
+          onClick={() => toggleSection('brands')}
+          className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
+        >
+          <span>Brands</span>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform ${
+              expandedSections.includes('brands') ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+        {expandedSections.includes('brands') && (
+          <div className="space-y-2">
+            {brands.map((brand) => (
+              <label key={brand.id} className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={brand.checked}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">{brand.label}</span>
+              </label>
+            ))}
+            <button className="text-sm text-blue-600 hover:text-blue-800 mt-2">See all</button>
+          </div>
+        )}
+      </div>
+
+      {/* Features */}
+      <div className="p-4 border-b border-gray-200">
+        <button
+          onClick={() => toggleSection('features')}
+          className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
+        >
+          <span>Features</span>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform ${
+              expandedSections.includes('features') ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+        {expandedSections.includes('features') && (
+          <div className="space-y-2">
+            {features.map((feature) => (
+              <label key={feature.id} className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={feature.checked}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">{feature.label}</span>
+              </label>
+            ))}
+            <button className="text-sm text-blue-600 hover:text-blue-800 mt-2">See all</button>
+          </div>
+        )}
+      </div>
+
+      {/* Price Range */}
+      <div className="p-4 border-b border-gray-200">
+        <button
+          onClick={() => toggleSection('price')}
+          className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
+        >
+          <span>Price range</span>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform ${
+              expandedSections.includes('price') ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+      </div>
+
+      {/* Condition */}
+      <div className="p-4 border-b border-gray-200">
+        <button
+          onClick={() => toggleSection('condition')}
+          className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
+        >
+          <span>Condition</span>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform ${
+              expandedSections.includes('condition') ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+      </div>
+
+      {/* Ratings */}
+      <div className="p-4 border-b border-gray-200">
+        <button
+          onClick={() => toggleSection('ratings')}
+          className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
+        >
+          <span>Ratings</span>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform ${
+              expandedSections.includes('ratings') ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+        {expandedSections.includes('ratings') && (
+          <div className="space-y-2">
+            {ratings.map((rating) => (
+              <label key={rating.id} className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rating.checked}
+                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="text-sm text-gray-700">{rating.label}</span>
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Manufacturer */}
+      <div className="p-4">
+        <button
+          onClick={() => toggleSection('manufacturer')}
+          className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
+        >
+          <span>Manufacturer</span>
+          <ChevronDown
+            className={`w-4 h-4 transition-transform ${
+              expandedSections.includes('manufacturer') ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb */}
-      <div>
+      <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-          <nav className="flex text-sm text-gray-500">
-            <a href="#" className="hover:text-blue-600">Home</a>
+          <nav className="flex text-sm text-gray-500 overflow-x-auto">
+            <a href="#" className="hover:text-blue-600 whitespace-nowrap">Home</a>
             <span className="mx-2">›</span>
-            <a href="#" className="hover:text-blue-600">Clothings</a>
+            <a href="#" className="hover:text-blue-600 whitespace-nowrap">Clothings</a>
             <span className="mx-2">›</span>
-            <a href="#" className="hover:text-blue-600">Men's wear</a>
+            <a href="#" className="hover:text-blue-600 whitespace-nowrap">Men's wear</a>
             <span className="mx-2">›</span>
-            <span className="text-gray-900">Summer clothing</span>
+            <span className="text-gray-900 whitespace-nowrap">Summer clothing</span>
           </nav>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex gap-6">
-          {/* Sidebar */}
-          <div className="w-64 flex-shrink-0">
-            <div className="bg-white rounded border border-gray-200">
-              {/* Category */}
-              <div className="p-4 border-b border-gray-200">
-                <button
-                  onClick={() => toggleSection('category')}
-                  className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
-                >
-                  <span>Category</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      expandedSections.includes('category') ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                {expandedSections.includes('category') && (
-                  <div className="space-y-2">
-                    {categories.map((category) => (
-                      <div key={category.id} className={`text-sm py-1 px-2 rounded cursor-pointer ${
-                        category.active ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'
-                      }`}>
-                        {category.label}
-                      </div>
-                    ))}
-                    <button className="text-sm text-blue-600 hover:text-blue-800 mt-2">See all</button>
-                  </div>
-                )}
-              </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-6">
+        <div className="flex gap-4 lg:gap-6">
+          {/* Desktop Sidebar */}
+          <div className="w-64 flex-shrink-0 hidden lg:block">
+            <FilterSidebar />
+          </div>
 
-              {/* Brands */}
-              <div className="p-4 border-b border-gray-200">
-                <button
-                  onClick={() => toggleSection('brands')}
-                  className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
-                >
-                  <span>Brands</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      expandedSections.includes('brands') ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                {expandedSections.includes('brands') && (
-                  <div className="space-y-2">
-                    {brands.map((brand) => (
-                      <label key={brand.id} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={brand.checked}
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700">{brand.label}</span>
-                      </label>
-                    ))}
-                    <button className="text-sm text-blue-600 hover:text-blue-800 mt-2">See all</button>
-                  </div>
-                )}
-              </div>
-
-              {/* Features */}
-              <div className="p-4 border-b border-gray-200">
-                <button
-                  onClick={() => toggleSection('features')}
-                  className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
-                >
-                  <span>Features</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      expandedSections.includes('features') ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                {expandedSections.includes('features') && (
-                  <div className="space-y-2">
-                    {features.map((feature) => (
-                      <label key={feature.id} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={feature.checked}
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700">{feature.label}</span>
-                      </label>
-                    ))}
-                    <button className="text-sm text-blue-600 hover:text-blue-800 mt-2">See all</button>
-                  </div>
-                )}
-              </div>
-
-              {/* Price Range */}
-              <div className="p-4 border-b border-gray-200">
-                <button
-                  onClick={() => toggleSection('price')}
-                  className="flex items-center justify-between w-full text-left font-left font-medium text-gray-900 mb-3"
-                >
-                  <span>Price range</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      expandedSections.includes('price') ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-              </div>
-
-              {/* Condition */}
-              <div className="p-4 border-b border-gray-200">
-                <button
-                  onClick={() => toggleSection('condition')}
-                  className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
-                >
-                  <span>Condition</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      expandedSections.includes('condition') ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-              </div>
-
-              {/* Ratings */}
-              <div className="p-4 border-b border-gray-200">
-                <button
-                  onClick={() => toggleSection('ratings')}
-                  className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
-                >
-                  <span>Ratings</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      expandedSections.includes('ratings') ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                {expandedSections.includes('ratings') && (
-                  <div className="space-y-2">
-                    {ratings.map((rating) => (
-                      <label key={rating.id} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={rating.checked}
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                        />
-                        <span className="text-sm text-gray-700">{rating.label}</span>
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Manufacturer */}
-              <div className="p-4">
-                <button
-                  onClick={() => toggleSection('manufacturer')}
-                  className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3"
-                >
-                  <span>Manufacturer</span>
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform ${
-                      expandedSections.includes('manufacturer') ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
+          {/* Mobile Filter Overlay */}
+          {showMobileFilters && (
+            <div className="fixed inset-0 z-50 lg:hidden">
+              <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setShowMobileFilters(false)} />
+              <div className="fixed inset-y-0 left-0 w-80 bg-white overflow-y-auto">
+                <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+                  <h2 className="text-lg font-semibold">Filters</h2>
+                  <button onClick={() => setShowMobileFilters(false)}>
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
+                <div className="p-4">
+                  <FilterSidebar />
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           {/* Main Content */}
           <div className="flex-1">
             {/* Header with filters */}
             <div className="bg-white rounded border border-gray-200 p-4 mb-4">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-4 space-y-4 lg:space-y-0">
                 <div className="text-sm text-gray-700">
                   12,911 items in <span className="font-medium">Mobile accessory</span>
                 </div>
-                <div className="flex items-center space-x-4">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                   <label className="flex items-center space-x-2">
                     <input
                       type="checkbox"
@@ -402,29 +420,38 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
                     />
                     <span className="text-sm text-gray-700">Verified only</span>
                   </label>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  >
-                    <option value="Featured">Featured</option>
-                    <option value="Price: Low to High">Price: Low to High</option>
-                    <option value="Price: High to Low">Price: High to Low</option>
-                    <option value="Highest Rated">Highest Rated</option>
-                    <option value="Newest">Newest</option>
-                  </select>
-                  <div className="flex border border-gray-300 rounded">
-                    <button
-                      onClick={() => setViewMode('grid')}
-                      className={`p-1.5 ${viewMode === 'grid' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                  <div className="flex items-center space-x-2">
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
                     >
-                      <Grid className="w-4 h-4" />
-                    </button>
+                      <option value="Featured">Featured</option>
+                      <option value="Price: Low to High">Price: Low to High</option>
+                      <option value="Price: High to Low">Price: High to Low</option>
+                      <option value="Highest Rated">Highest Rated</option>
+                      <option value="Newest">Newest</option>
+                    </select>
+                    <div className="flex border border-gray-300 rounded">
+                      <button
+                        onClick={() => setViewMode('grid')}
+                        className={`p-1.5 ${viewMode === 'grid' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                      >
+                        <Grid className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setViewMode('list')}
+                        className={`p-1.5 ${viewMode === 'list' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                      >
+                        <List className="w-4 h-4" />
+                      </button>
+                    </div>
                     <button
-                      onClick={() => setViewMode('list')}
-                      className={`p-1.5 ${viewMode === 'list' ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                      onClick={() => setShowMobileFilters(true)}
+                      className="lg:hidden flex items-center space-x-1 px-3 py-1.5 border border-gray-300 rounded text-sm"
                     >
-                      <List className="w-4 h-4" />
+                      <Filter className="w-4 h-4" />
+                      <span>Filters</span>
                     </button>
                   </div>
                 </div>
@@ -459,7 +486,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
 
             {/* Products */}
             {viewMode === 'grid' ? (
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {products.map((product) => (
                   <ProductCard
                     key={product.id}
@@ -483,7 +510,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
             )}
 
             {/* Pagination */}
-            <div className="flex items-center justify-between mt-8">
+            <div className="flex flex-col sm:flex-row items-center justify-between mt-8 space-y-4 sm:space-y-0">
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-700">Show</span>
                 <select className="border border-gray-300 rounded px-3 py-1 text-sm">
@@ -505,24 +532,24 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
       </div>
 
       {/* Newsletter Subscription Section */}
-      <div className="bg-gray-100 py-16">
+      <div className="bg-gray-100 py-12 lg:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Subscribe on our newsletter</h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+          <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">Subscribe on our newsletter</h2>
+          <p className="text-gray-600 mb-6 lg:mb-8 max-w-2xl mx-auto">
             Get daily news on upcoming offers from many suppliers all over the world
           </p>
-          <form onSubmit={handleNewsletterSubmit} className="flex max-w-md mx-auto">
+          <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row max-w-md mx-auto space-y-2 sm:space-y-0">
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
             <button
               type="submit"
-              className="bg-blue-500 text-white px-6 py-3 rounded-r-lg hover:bg-blue-600 transition-colors font-medium"
+              className="bg-blue-500 text-white px-6 py-3 rounded-lg sm:rounded-l-none sm:rounded-r-lg hover:bg-blue-600 transition-colors font-medium"
             >
               Subscribe
             </button>
@@ -532,10 +559,10 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 lg:gap-8">
             {/* Brand Section */}
-            <div className="md:col-span-1">
+            <div className="col-span-2 md:col-span-3 lg:col-span-1">
               <div className="flex items-center space-x-2 mb-4">
                 <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
                   <span className="text-white font-bold text-sm">B</span>
@@ -607,22 +634,22 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
 
             {/* Get app Section */}
             <div>
-                <h5 className="font-semibold text-gray-900 mb-2">Get app</h5>
-                <div className="space-y-2">
-                  <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-                    </svg>
-                    <span className="text-white text-xs">App Store</span>
-                  </div>
-                  <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
-                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.833 12l1.865-1.865zM5.864 2.658L16.802 8.99l-2.302 2.302-8.636-8.634z"/>
-                    </svg>
-                    <span className="text-white text-xs">Google Play</span>
-                  </div>
+              <h5 className="font-semibold text-gray-900 mb-2">Get app</h5>
+              <div className="space-y-2">
+                <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                  </svg>
+                  <span className="text-white text-xs">App Store</span>
+                </div>
+                <div className="w-32 h-10 bg-black rounded flex items-center justify-center space-x-2">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.833 12l1.865-1.865zM5.864 2.658L16.802 8.99l-2.302 2.302-8.636-8.634z"/>
+                  </svg>
+                  <span className="text-white text-xs">Google Play</span>
                 </div>
               </div>
+            </div>
           </div>
 
           {/* Bottom Footer */}

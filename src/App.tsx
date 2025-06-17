@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, User, Heart, ShoppingCart, Menu, ChevronDown, Star, MapPin, Truck, Shield, Eye, MessageSquare } from 'lucide-react';
+import { Search, User, Heart, ShoppingCart, Menu, ChevronDown, Star, MapPin, Truck, Shield, Eye, MessageSquare, X } from 'lucide-react';
 import { Facebook, Twitter, Linkedin, Instagram, Youtube } from 'lucide-react';
 import FlagIcon from './components/FlagIcon';
 import ProductListPage from './pages/ProductListPage';
@@ -32,6 +32,8 @@ interface HeaderProps {
   onWishlistClick: () => void;
   onProfileClick: () => void;
   onMessagesClick: () => void;
+  isMobileMenuOpen: boolean;
+  setIsMobileMenuOpen: (open: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -54,6 +56,8 @@ const Header: React.FC<HeaderProps> = ({
   onWishlistClick,
   onProfileClick,
   onMessagesClick,
+  isMobileMenuOpen,
+  setIsMobileMenuOpen,
 }) => {
   const { state } = useApp();
   
@@ -61,15 +65,16 @@ const Header: React.FC<HeaderProps> = ({
     <header className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-4 lg:space-x-8">
             <div className="flex items-center space-x-2 cursor-pointer" onClick={onHomeClick}>
               <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
                 <span className="text-white font-bold text-sm">B</span>
               </div>
-              <span className="text-xl font-bold text-blue-500">Brand</span>
+              <span className="text-xl font-bold text-blue-500 hidden sm:block">Brand</span>
             </div>
 
-            <div className="hidden md:flex items-center space-x-4">
+            {/* Desktop Search */}
+            <div className="hidden lg:flex items-center space-x-4">
               <div className="relative">
                 <select
                   value={selectedCategory}
@@ -96,10 +101,19 @@ const Header: React.FC<HeaderProps> = ({
                 </button>
               </div>
             </div>
+
+            {/* Mobile Search Button */}
+            <button
+              onClick={onSearchClick}
+              className="lg:hidden p-2 text-gray-600 hover:text-blue-500"
+            >
+              <Search className="w-5 h-5" />
+            </button>
           </div>
 
-          <div className="flex items-center space-x-6">
-            <div className="hidden md:flex items-center space-x-4 text-sm text-gray-600">
+          <div className="flex items-center space-x-4 lg:space-x-6">
+            {/* Desktop Language/Shipping */}
+            <div className="hidden lg:flex items-center space-x-4 text-sm text-gray-600">
               <div className="relative">
                 <button
                   onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
@@ -154,7 +168,9 @@ const Header: React.FC<HeaderProps> = ({
                 )}
               </div>
             </div>
-            <div className="flex items-center space-x-4">
+
+            {/* Action Icons */}
+            <div className="flex items-center space-x-3 lg:space-x-4">
               <button 
                 onClick={onProfileClick}
                 className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-500"
@@ -168,7 +184,6 @@ const Header: React.FC<HeaderProps> = ({
                 title="Messages"
               >
                 <MessageSquare className="w-5 h-5" />
-                {/* Notification badge for unread messages */}
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                   3
                 </span>
@@ -197,12 +212,113 @@ const Header: React.FC<HeaderProps> = ({
                   </span>
                 )}
               </button>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="lg:hidden p-2 text-gray-600 hover:text-blue-500"
+              >
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="border-t border-gray-200">
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden bg-white border-t border-gray-200">
+          <div className="px-4 py-4 space-y-4">
+            {/* Mobile Search */}
+            <div className="space-y-2">
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full appearance-none bg-white border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+              </select>
+              <div className="flex">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={onSearchClick}
+                  className="bg-blue-500 text-white px-6 py-2 rounded-r hover:bg-blue-600 transition-colors"
+                >
+                  Search
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Language/Shipping */}
+            <div className="space-y-2">
+              <div className="relative">
+                <button
+                  onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}
+                  className="w-full flex items-center justify-between px-4 py-2 border border-gray-300 rounded text-left"
+                >
+                  <span>{selectedLanguage}</span>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                {showLanguageDropdown && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    {languageOptions.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => {
+                          setSelectedLanguage(option);
+                          setShowLanguageDropdown(false);
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="relative">
+                <button
+                  onClick={() => setShowShippingDropdown(!showShippingDropdown)}
+                  className="w-full flex items-center justify-between px-4 py-2 border border-gray-300 rounded text-left"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span>Ship to</span>
+                    <FlagIcon country={selectedShipping} className="w-5 h-4 rounded" />
+                  </div>
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+                {showShippingDropdown && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                    {shippingOptions.map((option) => (
+                      <button
+                        key={option.country}
+                        onClick={() => {
+                          setSelectedShipping(option.country);
+                          setShowShippingDropdown(false);
+                        }}
+                        className="flex items-center space-x-2 w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        <FlagIcon country={option.flag} className="w-5 h-4 rounded" />
+                        <span>{option.country}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Navigation */}
+      <div className="border-t border-gray-200 hidden lg:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center space-x-8 h-12 text-sm">
             <button className="flex items-center space-x-1 text-gray-700 hover:text-blue-500">
@@ -246,10 +362,10 @@ const Footer: React.FC<FooterProps> = ({
 
   return (
     <footer className="bg-white border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 lg:gap-8">
           {/* Brand Section */}
-          <div className="md:col-span-1">
+          <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-8 h-8 bg-blue-500 rounded flex items-center justify-center">
                 <span className="text-white font-bold text-sm">B</span>
@@ -382,7 +498,7 @@ function AppContent() {
   const [currentPage, setCurrentPage] = useState<CurrentPage>('home');
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState('All category');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('English, USD');
   const [selectedShipping, setSelectedShipping] = useState('France');
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
@@ -503,6 +619,7 @@ function AppContent() {
   const handleProductClick = (productId: string) => {
     setSelectedProductId(productId);
     setCurrentPage('product-detail');
+    setIsMobileMenuOpen(false);
   };
 
   const handleBackToList = () => {
@@ -511,26 +628,32 @@ function AppContent() {
 
   const handleBackToHome = () => {
     setCurrentPage('home');
+    setIsMobileMenuOpen(false);
   };
 
   const handleNavigateToProducts = () => {
     setCurrentPage('products');
+    setIsMobileMenuOpen(false);
   };
 
   const handleNavigateToCart = () => {
     setCurrentPage('cart');
+    setIsMobileMenuOpen(false);
   };
 
   const handleNavigateToWishlist = () => {
     setCurrentPage('wishlist');
+    setIsMobileMenuOpen(false);
   };
 
   const handleNavigateToProfile = () => {
     setCurrentPage('profile');
+    setIsMobileMenuOpen(false);
   };
 
   const handleNavigateToMessages = () => {
     setCurrentPage('messages');
+    setIsMobileMenuOpen(false);
   };
 
   const handleCountrySelect = (country: string) => {
@@ -559,6 +682,8 @@ function AppContent() {
     onWishlistClick: handleNavigateToWishlist,
     onProfileClick: handleNavigateToProfile,
     onMessagesClick: handleNavigateToMessages,
+    isMobileMenuOpen,
+    setIsMobileMenuOpen,
   };
 
   // Common footer props
@@ -675,12 +800,12 @@ function AppContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header {...headerProps} />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-8">
+          <div className="lg:col-span-1 order-2 lg:order-1">
+            <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6">
               <h3 className="font-semibold text-gray-900 mb-4">Categories</h3>
-              <ul className="space-y-3">
+              <ul className="space-y-2 lg:space-y-3">
                 {categories.map((category) => (
                   <li key={category}>
                     <button
@@ -695,26 +820,26 @@ function AppContent() {
             </div>
           </div>
 
-          <div className="lg:col-span-3 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="md:col-span-2 bg-gradient-to-r from-emerald-200 to-teal-400 rounded-lg p-8 text-white relative overflow-hidden">
-                <div className="relative z-10">
-                  <h2 className="text-2xl font-bold mb-2 text-black">Latest trending</h2>
-                  <h3 className="text-xl mb-4 text-black">Electronic items</h3>
+          <div className="lg:col-span-3 space-y-1 lg:space-y-2 order-1 lg:order-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-1 lg:gap-6">
+              <div className="md:col-span-2 bg-gradient-to-r from-emerald-200 to-teal-400 rounded-lg p-6 lg:p-8 text-white relative overflow-hidden">
+                <div className="relative z-5">
+                  <h2 className="text-xl lg:text-2xl font-bold mb-2 text-black">Latest trending</h2>
+                  <h3 className="text-lg lg:text-xl mb-4 text-black">Electronic items</h3>
                   <button
                     onClick={handleNavigateToProducts}
-                    className="bg-white text-black text-teal-500 px-6 py-2 rounded font-medium hover:bg-gray-100 transition-colors"
+                    className="bg-white text-black text-teal-500 px-4 lg:px-6 py-2 rounded font-medium hover:bg-gray-100 transition-colors"
                   >
                     Learn more
                   </button>
                 </div>
-                <div className="absolute right-0 top-0 w-90 h-full">
+                <div className="absolute right-0 top-0 w-32 lg:w-190 h-full">
                   <img src="/headphone.png" alt="Electronics" className="w-full h-full object-cover opacity-80" />
                 </div>
               </div>
 
               <div className="space-y-4">
-                <div className="bg-white rounded-lg p-6 text-center border border-gray-200">
+                <div className="bg-white rounded-lg p-4 lg:p-6 text-center border border-gray-200">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                     <User className="w-6 h-6 text-blue-500" />
                   </div>
@@ -740,40 +865,40 @@ function AppContent() {
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-semibold">Deals and offers</h3>
+                <h3 className="text-lg lg:text-xl font-semibold">Deals and offers</h3>
                 <div className="flex space-x-2">
-                  <span className="bg-orange-500 text-white px-3 py-1 rounded text-sm">04</span>
-                  <span className="bg-gray-800 text-white px-3 py-1 rounded text-sm">13</span>
-                  <span className="bg-gray-800 text-white px-3 py-1 rounded text-sm">34</span>
-                  <span className="bg-gray-800 text-white px-3 py-1 rounded text-sm">56</span>
+                  <span className="bg-orange-500 text-white px-2 lg:px-3 py-1 rounded text-sm">04</span>
+                  <span className="bg-gray-800 text-white px-2 lg:px-3 py-1 rounded text-sm">13</span>
+                  <span className="bg-gray-800 text-white px-2 lg:px-3 py-1 rounded text-sm">34</span>
+                  <span className="bg-gray-800 text-white px-2 lg:px-3 py-1 rounded text-sm">56</span>
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-3 lg:gap-4">
                 {deals.map((deal, index) => (
                   <div key={index} className="text-center group cursor-pointer" onClick={handleNavigateToProducts}>
                     <div className="relative mb-3">
-                      <div className="w-24 h-24 bg-gray-100 rounded-lg mx-auto overflow-hidden">
+                      <div className="w-16 h-16 lg:w-24 lg:h-24 bg-gray-100 rounded-lg mx-auto overflow-hidden">
                         <img
                           src={deal.image}
                           alt={deal.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                         />
                       </div>
-                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 lg:px-2 py-1 rounded">
                         {deal.discount}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-700 group-hover:text-blue-500">{deal.name}</p>
+                    <p className="text-xs lg:text-sm text-gray-700 group-hover:text-blue-500">{deal.name}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden h-200">
-              <div className="grid grid-cols-1 lg:grid-cols-3 h-220">
-                <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 p-6 flex flex-col justify-between">
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+              <div className="grid grid-cols-1 lg:grid-cols-3">
+                <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 p-4 lg:p-6 flex flex-col justify-between">
                   <div className="absolute inset-0 opacity-20">
                     <img
                       src="/interior/1.jpg"
@@ -782,7 +907,7 @@ function AppContent() {
                     />
                   </div>
                   <div className="relative z-10">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Home and outdoor</h3>
+                    <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-2">Home and outdoor</h3>
                     <button
                       onClick={handleNavigateToProducts}
                       className="bg-white text-gray-900 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
@@ -792,11 +917,11 @@ function AppContent() {
                   </div>
                 </div>
 
-                <div className="lg:col-span-2 p-120">
-                  <div className="grid grid-cols-4 gap-3 h-full">
+                <div className="lg:col-span-2 p-3 lg:p-4">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-3 h-full">
                     {homeProducts.map((product, index) => (
                       <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
-                        <div className="w-full h-16 bg-gray-50 rounded mb-2 overflow-hidden">
+                        <div className="w-full h-12 lg:h-16 bg-gray-50 rounded mb-2 overflow-hidden">
                           <img
                             src={product.image}
                             alt={product.name}
@@ -813,8 +938,8 @@ function AppContent() {
             </div>
 
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="grid grid-cols-1 lg:grid-cols-3 h-30">
-                <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-6 flex flex-col justify-between">
+              <div className="grid grid-cols-1 lg:grid-cols-3">
+                <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-4 lg:p-6 flex flex-col justify-between">
                   <div className="absolute inset-0 opacity-20">
                     <img
                       src="/tech/7.jpg"
@@ -823,7 +948,7 @@ function AppContent() {
                     />
                   </div>
                   <div className="relative z-10">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Consumer electronics and gadgets</h3>
+                    <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-2">Consumer electronics and gadgets</h3>
                     <button
                       onClick={handleNavigateToProducts}
                       className="bg-white text-gray-900 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
@@ -833,11 +958,11 @@ function AppContent() {
                   </div>
                 </div>
 
-                <div className="lg:col-span-2 p-4">
-                  <div className="grid grid-cols-4 gap-3 h-full">
+                <div className="lg:col-span-2 p-3 lg:p-4">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-3 h-full">
                     {electronicsProducts.map((product, index) => (
                       <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
-                        <div className="w-full h-16 bg-gray-50 rounded mb-2 overflow-hidden">
+                        <div className="w-full h-12 lg:h-16 bg-gray-50 rounded mb-2 overflow-hidden">
                           <img
                             src={product.image}
                             alt={product.name}
@@ -853,13 +978,13 @@ function AppContent() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-blue-500 to-teal-400 rounded-lg p-8 text-white">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="bg-gradient-to-r from-blue-500 to-teal-400 rounded-lg p-6 lg:p-8 text-white">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-center">
                 <div>
-                  <h3 className="text-2xl font-bold mb-4">An easy way to send requests to all suppliers</h3>
+                  <h3 className="text-xl lg:text-2xl font-bold mb-4">An easy way to send requests to all suppliers</h3>
                   <p className="text-blue-100 mb-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
                 </div>
-                <div className="bg-white rounded-lg p-6 text-gray-900">
+                <div className="bg-white rounded-lg p-4 lg:p-6 text-gray-900">
                   <h4 className="font-semibold mb-4">Send quote to suppliers</h4>
                   <input
                     type="text"
@@ -888,12 +1013,12 @@ function AppContent() {
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-xl font-semibold mb-6">Recommended items</h3>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6">
+              <h3 className="text-lg lg:text-xl font-semibold mb-6">Recommended items</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
                 {recommendedItems.map((item, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
-                    <div className="w-full h-32 bg-gray-100 rounded mb-3 overflow-hidden">
+                  <div key={index} className="border border-gray-200 rounded-lg p-3 lg:p-4 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
+                    <div className="w-full h-24 lg:h-32 bg-gray-100 rounded mb-3 overflow-hidden">
                       <img
                         src={item.image}
                         alt={item.name}
@@ -907,28 +1032,28 @@ function AppContent() {
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-xl font-semibold mb-6">Our extra services</h3>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6">
+              <h3 className="text-lg lg:text-xl font-semibold mb-6">Our extra services</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
                 {services.map((service, index) => {
                   const IconComponent = service.icon;
                   return (
                     <div key={index} className="relative rounded-lg overflow-hidden group cursor-pointer">
-                      <div className="h-32 bg-gray-200 overflow-hidden">
+                      <div className="h-24 lg:h-32 bg-gray-200 overflow-hidden">
                         <img
                           src={service.image}
                           alt={service.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                         />
                       </div>
-                      <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-between p-4">
+                      <div className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-between p-3 lg:p-4">
                         <div className="flex justify-end">
-                          <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                            <IconComponent className="w-5 h-5 text-white" />
+                          <div className="w-8 h-8 lg:w-10 lg:h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                            <IconComponent className="w-4 h-4 lg:w-5 lg:h-5 text-white" />
                           </div>
                         </div>
                         <div>
-                          <p className="text-white text-sm font-medium leading-tight">{service.title}</p>
+                          <p className="text-white text-xs lg:text-sm font-medium leading-tight">{service.title}</p>
                         </div>
                       </div>
                     </div>
@@ -937,12 +1062,12 @@ function AppContent() {
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-xl font-semibold mb-6">Suppliers by region</h3>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6">
+              <h3 className="text-lg lg:text-xl font-semibold mb-6">Suppliers by region</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 lg:gap-4">
                 {suppliers.map((supplier, index) => (
                   <div key={index} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                    <FlagIcon country={supplier.country} className="w-8 h-6 rounded" />
+                    <FlagIcon country={supplier.country} className="w-6 h-4 lg:w-8 lg:h-6 rounded" />
                     <div>
                       <p className="text-sm font-medium text-gray-900">{supplier.country}</p>
                       <p className="text-xs text-gray-500">{supplier.name}</p>
@@ -955,10 +1080,10 @@ function AppContent() {
         </div>
       </main>
 
-      <section className="bg-gray-100 py-12">
+      <section className="bg-gray-100 py-8 lg:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Subscribe on our newsletter</h3>
-          <p className="text-gray-600 mb-8">Get daily news on upcoming offers from many suppliers all over the world</p>
+          <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-4">Subscribe on our newsletter</h3>
+          <p className="text-gray-600 mb-6 lg:mb-8">Get daily news on upcoming offers from many suppliers all over the world</p>
           <div className="flex justify-center">
             <div className="flex max-w-md w-full">
               <input
@@ -966,7 +1091,7 @@ function AppContent() {
                 placeholder="Email"
                 className="flex-1 px-4 py-3 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <button className="bg-blue-500 text-white px-8 py-3 rounded-r hover:bg-blue-600 transition-colors">
+              <button className="bg-blue-500 text-white px-6 lg:px-8 py-3 rounded-r hover:bg-blue-600 transition-colors">
                 Subscribe
               </button>
             </div>

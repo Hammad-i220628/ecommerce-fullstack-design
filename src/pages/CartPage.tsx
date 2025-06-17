@@ -73,8 +73,8 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center justify-between mb-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
+        <div className="flex items-center justify-between mb-6 lg:mb-8">
           <div className="flex items-center space-x-4">
             <button
               onClick={onBackToHome}
@@ -92,19 +92,19 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-sm">
-              <div className="p-6 border-b border-gray-200">
-                <h1 className="text-2xl font-bold text-gray-900">My cart ({state.cart.length})</h1>
+              <div className="p-4 lg:p-6 border-b border-gray-200">
+                <h1 className="text-xl lg:text-2xl font-bold text-gray-900">My cart ({state.cart.length})</h1>
               </div>
               
               <div className="divide-y divide-gray-200">
                 {state.cart.map((item) => (
-                  <div key={item.id} className="p-6">
+                  <div key={item.id} className="p-4 lg:p-6">
                     <div className="flex space-x-4">
-                      <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                      <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
                         <img
                           src={item.product.image}
                           alt={item.product.name}
@@ -113,7 +113,7 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
+                        <h3 className="text-base lg:text-lg font-medium text-gray-900 mb-2">
                           {item.product.name}
                         </h3>
                         <div className="text-sm text-gray-600 space-y-1">
@@ -137,7 +137,7 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
                       </div>
                       
                       <div className="flex flex-col items-end space-y-4">
-                        <div className="text-xl font-bold text-gray-900">
+                        <div className="text-lg lg:text-xl font-bold text-gray-900">
                           ${item.product.price.toFixed(2)}
                         </div>
                         
@@ -169,7 +169,7 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-6">
+            <div className="bg-white rounded-lg shadow-sm p-4 lg:p-6 sticky top-6">
               {/* Coupon Section */}
               <div className="mb-6">
                 <h3 className="text-sm font-medium text-gray-900 mb-3">Have a coupon?</h3>
@@ -218,12 +218,12 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
                 Checkout
               </button>
 
-              <div className="flex justify-center space-x-3 mb-6">
-                <img src="/payment/1.png" alt="Visa" className="h-6 object-contain" />
-                <img src="/payment/2.png" alt="Mastercard" className="h-6 object-contain" />
-                <img src="/payment/3.png" alt="PayPal" className="h-6 object-contain" />
-                <img src="/payment/4.png" alt="Apple Pay" className="h-6 object-contain" />
-                <img src="/payment/5.png" alt="Google Pay" className="h-6 object-contain" />
+              <div className="flex justify-center space-x-3 mb-6 overflow-x-auto">
+                <img src="/payment/1.png" alt="Visa" className="h-6 object-contain flex-shrink-0" />
+                <img src="/payment/2.png" alt="Mastercard" className="h-6 object-contain flex-shrink-0" />
+                <img src="/payment/3.png" alt="PayPal" className="h-6 object-contain flex-shrink-0" />
+                <img src="/payment/4.png" alt="Apple Pay" className="h-6 object-contain flex-shrink-0" />
+                <img src="/payment/5.png" alt="Google Pay" className="h-6 object-contain flex-shrink-0" />
               </div>
             </div>
           </div>
@@ -231,19 +231,19 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
 
         {/* Saved for Later */}
         {state.wishlist.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Saved for later</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="mt-8 lg:mt-12">
+            <h2 className="text-lg lg:text-xl font-bold text-gray-900 mb-6">Saved for later</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
               {state.wishlist.slice(0, 4).map((item) => (
-                <div key={item.id} className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="w-full h-32 bg-gray-100 rounded mb-3 overflow-hidden">
+                <div key={item.id} className="bg-white rounded-lg p-3 lg:p-4 shadow-sm">
+                  <div className="w-full h-24 lg:h-32 bg-gray-100 rounded mb-3 overflow-hidden">
                     <img
                       src={item.product.image}
                       alt={item.product.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="text-lg font-bold text-gray-900 mb-2">
+                  <div className="text-base lg:text-lg font-bold text-gray-900 mb-2">
                     ${item.product.price.toFixed(2)}
                   </div>
                   <h3 className="text-sm text-gray-700 mb-3 line-clamp-2">
@@ -262,10 +262,10 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
         )}
 
         {/* Promotional Banner */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-8 mt-12 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-2xl font-bold mb-2">Super discount on more than 100 USD</h3>
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-6 lg:p-8 mt-8 lg:mt-12 text-white">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="mb-4 md:mb-0">
+              <h3 className="text-xl lg:text-2xl font-bold mb-2">Super discount on more than 100 USD</h3>
               <p className="text-blue-100">Have you ever finally just write dummy info</p>
             </div>
             <button className="bg-orange-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors">
