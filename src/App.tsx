@@ -833,7 +833,7 @@ function AppContent() {
                     Learn more
                   </button>
                 </div>
-                <div className="absolute right-0 top-0 w-32 lg:w-190 h-full">
+                <div className="absolute right-0 top-0 w-50 lg:w-190 h-full">
                   <img src="/headphone.png" alt="Electronics" className="w-full h-full object-cover opacity-80" />
                 </div>
               </div>
