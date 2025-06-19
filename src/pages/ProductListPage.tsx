@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Grid, List, ChevronDown, Filter, Facebook, Twitter, Linkedin, Instagram, Youtube, Heart, Star, Menu, X } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Grid, List, ChevronDown, Filter, Facebook, Twitter, Linkedin, Instagram, Youtube, Heart, Star, Menu, X, Search } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import FlagIcon from '../components/FlagIcon';
 
@@ -26,14 +26,17 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('Featured');
   const [verifiedOnly, setVerifiedOnly] = useState(false);
-  const [activeFilters, setActiveFilters] = useState<string[]>(['Samsung', 'Apple', 'Pocco', 'Metallic', '4 star', '3 star']);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(['Samsung', 'Apple', 'Pocco']);
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>(['Metallic']);
+  const [selectedRatings, setSelectedRatings] = useState<string[]>(['4star', '3star']);
   const [email, setEmail] = useState('');
   const [expandedSections, setExpandedSections] = useState<string[]>(['category', 'brands', 'features']);
   const [selectedCountry, setSelectedCountry] = useState('United States');
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  const products: Product[] = [
+  const allProducts: Product[] = [
     {
       id: '1',
       name: 'Gaming headphone with Mic - High Quality',
@@ -45,7 +48,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
       freeShipping: true,
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua',
       category: 'electronics',
-      brand: 'canon',
+      brand: 'pocco',
       features: ['metallic', '4star']
     },
     {
@@ -58,7 +61,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
       freeShipping: true,
       description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit',
       category: 'smartphones',
-      brand: 'gopro',
+      brand: 'pocco',
       features: ['plastic', '4star']
     },
     {
@@ -72,11 +75,11 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
       description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit',
       category: 'smartphones',
       brand: 'samsung',
-      features: ['metallic', '5star']
+      features: ['metallic', '4star']
     },
     {
       id: '4',
-      name: 'Iphone 13 Pro Max - 256GB',
+      name: 'iPhone 13 Pro Max - 256GB',
       price: 150.00,
       originalPrice: 1128.00,
       rating: 4.5,
@@ -85,7 +88,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
       freeShipping: true,
       description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit',
       category: 'electronics',
-      brand: 'canon',
+      brand: 'apple',
       features: ['metallic', '4star']
     },
     {
@@ -100,7 +103,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
       description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit',
       category: 'electronics',
       brand: 'apple',
-      features: ['metallic', '5star']
+      features: ['metallic', '4star']
     },
     {
       id: '6',
@@ -125,26 +128,29 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
   ];
 
   const brands = [
-    { id: 'samsung', label: 'Samsung', checked: true },
-    { id: 'apple', label: 'Apple', checked: true },
-    { id: 'huawei', label: 'Huawei', checked: false },
-    { id: 'pocco', label: 'Pocco', checked: true },
-    { id: 'lenovo', label: 'Lenovo', checked: false }
+    { id: 'samsung', label: 'Samsung' },
+    { id: 'apple', label: 'Apple' },
+    { id: 'huawei', label: 'Huawei' },
+    { id: 'pocco', label: 'Pocco' },
+    { id: 'lenovo', label: 'Lenovo' },
+    { id: 'canon', label: 'Canon' },
+    { id: 'gopro', label: 'GoPro' }
   ];
 
   const features = [
-    { id: 'metallic', label: 'Metallic', checked: true },
-    { id: 'plastic-cover', label: 'Plastic cover', checked: false },
-    { id: '8gb-ram', label: '8GB Ram', checked: false },
-    { id: 'super-power', label: 'Super power', checked: false },
-    { id: 'large-memory', label: 'Large Memory', checked: false }
+    { id: 'metallic', label: 'Metallic' },
+    { id: 'plastic-cover', label: 'Plastic cover' },
+    { id: '8gb-ram', label: '8GB Ram' },
+    { id: 'super-power', label: 'Super power' },
+    { id: 'large-memory', label: 'Large Memory' }
   ];
 
   const ratings = [
-    { id: '4star', label: '4 star', checked: true },
-    { id: '3star', label: '3 star', checked: true },
-    { id: '2star', label: '2 star', checked: false },
-    { id: '1star', label: '1 star', checked: false }
+    { id: '5star', label: '5 star' },
+    { id: '4star', label: '4 star' },
+    { id: '3star', label: '3 star' },
+    { id: '2star', label: '2 star' },
+    { id: '1star', label: '1 star' }
   ];
 
   const countries = [
@@ -157,6 +163,86 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
     'Pakistan'
   ];
 
+  // Filter and sort products
+  const filteredAndSortedProducts = useMemo(() => {
+    let filtered = allProducts;
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(query) ||
+        product.description?.toLowerCase().includes(query) ||
+        product.brand.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query)
+      );
+    }
+
+    // Apply brand filter
+    if (selectedBrands.length > 0) {
+      filtered = filtered.filter(product =>
+        selectedBrands.some(brand => brand.toLowerCase() === product.brand.toLowerCase())
+      );
+    }
+
+    // Apply features filter
+    if (selectedFeatures.length > 0) {
+      filtered = filtered.filter(product =>
+        selectedFeatures.some(feature =>
+          product.features.some(productFeature =>
+            productFeature.toLowerCase() === feature.toLowerCase()
+          )
+        )
+      );
+    }
+
+    // Apply ratings filter
+    if (selectedRatings.length > 0) {
+      filtered = filtered.filter(product =>
+        selectedRatings.some(rating =>
+          product.features.some(productFeature =>
+            productFeature.toLowerCase() === rating.toLowerCase()
+          )
+        )
+      );
+    }
+
+    // Apply sorting
+    const sorted = [...filtered];
+    switch (sortBy) {
+      case 'Price: Low to High':
+        sorted.sort((a, b) => a.price - b.price);
+        break;
+      case 'Price: High to Low':
+        sorted.sort((a, b) => b.price - a.price);
+        break;
+      case 'Highest Rated':
+        sorted.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'Newest':
+        // For demo purposes, sort by ID (assuming higher ID = newer)
+        sorted.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+        break;
+      default:
+        // Featured - keep original order
+        break;
+    }
+
+    return sorted;
+  }, [allProducts, searchQuery, selectedBrands, selectedFeatures, selectedRatings, sortBy]);
+
+  // Get active filters for display
+  const activeFilters = useMemo(() => {
+    const filters = [];
+    if (searchQuery.trim()) {
+      filters.push(`Search: "${searchQuery}"`);
+    }
+    selectedBrands.forEach(brand => filters.push(brand));
+    selectedFeatures.forEach(feature => filters.push(feature));
+    selectedRatings.forEach(rating => filters.push(rating));
+    return filters;
+  }, [searchQuery, selectedBrands, selectedFeatures, selectedRatings]);
+
   const toggleSection = (sectionId: string) => {
     setExpandedSections(prev =>
       prev.includes(sectionId)
@@ -165,12 +251,47 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
     );
   };
 
+  const toggleBrand = (brandId: string) => {
+    setSelectedBrands(prev =>
+      prev.includes(brandId)
+        ? prev.filter(id => id !== brandId)
+        : [...prev, brandId]
+    );
+  };
+
+  const toggleFeature = (featureId: string) => {
+    setSelectedFeatures(prev =>
+      prev.includes(featureId)
+        ? prev.filter(id => id !== featureId)
+        : [...prev, featureId]
+    );
+  };
+
+  const toggleRating = (ratingId: string) => {
+    setSelectedRatings(prev =>
+      prev.includes(ratingId)
+        ? prev.filter(id => id !== ratingId)
+        : [...prev, ratingId]
+    );
+  };
+
   const removeFilter = (filter: string) => {
-    setActiveFilters(prev => prev.filter(f => f !== filter));
+    if (filter.startsWith('Search:')) {
+      setSearchQuery('');
+    } else if (selectedBrands.includes(filter)) {
+      toggleBrand(filter);
+    } else if (selectedFeatures.includes(filter)) {
+      toggleFeature(filter);
+    } else if (selectedRatings.includes(filter)) {
+      toggleRating(filter);
+    }
   };
 
   const clearAllFilters = () => {
-    setActiveFilters([]);
+    setSearchQuery('');
+    setSelectedBrands([]);
+    setSelectedFeatures([]);
+    setSelectedRatings([]);
   };
 
   const renderStars = (rating: number) => {
@@ -197,6 +318,21 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
 
   const FilterSidebar = () => (
     <div className="bg-white rounded border border-gray-200">
+      {/* Search */}
+      <div className="p-4 border-b border-gray-200">
+        <h3 className="font-medium text-gray-900 mb-3">Search</h3>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search products..."
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      </div>
+
       {/* Category */}
       <div className="p-4 border-b border-gray-200">
         <button
@@ -243,7 +379,8 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
               <label key={brand.id} className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={brand.checked}
+                  checked={selectedBrands.includes(brand.id)}
+                  onChange={() => toggleBrand(brand.id)}
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-700">{brand.label}</span>
@@ -273,7 +410,8 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
               <label key={feature.id} className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={feature.checked}
+                  checked={selectedFeatures.includes(feature.id)}
+                  onChange={() => toggleFeature(feature.id)}
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-700">{feature.label}</span>
@@ -333,7 +471,8 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
               <label key={rating.id} className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={rating.checked}
+                  checked={selectedRatings.includes(rating.id)}
+                  onChange={() => toggleRating(rating.id)}
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-700">{rating.label}</span>
@@ -408,7 +547,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
             <div className="bg-white rounded border border-gray-200 p-4 mb-4">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-4 space-y-4 lg:space-y-0">
                 <div className="text-sm text-gray-700">
-                  12,911 items in <span className="font-medium">Mobile accessory</span>
+                  {filteredAndSortedProducts.length} items in <span className="font-medium">Mobile accessory</span>
                 </div>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                   <label className="flex items-center space-x-2">
@@ -487,7 +626,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
             {/* Products */}
             {viewMode === 'grid' ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {products.map((product) => (
+                {filteredAndSortedProducts.map((product) => (
                   <ProductCard
                     key={product.id}
                     product={product}
@@ -498,7 +637,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
               </div>
             ) : (
               <div className="bg-white border border-gray-200 rounded">
-                {products.map((product) => (
+                {filteredAndSortedProducts.map((product) => (
                   <ProductCard
                     key={product.id}
                     product={product}
@@ -509,24 +648,43 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
               </div>
             )}
 
+            {/* No results message */}
+            {filteredAndSortedProducts.length === 0 && (
+              <div className="text-center py-12">
+                <div className="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search className="w-12 h-12 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
+                <p className="text-gray-600 mb-4">Try adjusting your search or filter criteria.</p>
+                <button
+                  onClick={clearAllFilters}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            )}
+
             {/* Pagination */}
-            <div className="flex flex-col sm:flex-row items-center justify-between mt-8 space-y-4 sm:space-y-0">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-700">Show</span>
-                <select className="border border-gray-300 rounded px-3 py-1 text-sm">
-                  <option>10</option>
-                  <option>20</option>
-                  <option>50</option>
-                </select>
+            {filteredAndSortedProducts.length > 0 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between mt-8 space-y-4 sm:space-y-0">
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-gray-700">Show</span>
+                  <select className="border border-gray-300 rounded px-3 py-1 text-sm">
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                  </select>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700">‹</button>
+                  <button className="px-3 py-2 text-sm bg-blue-500 text-white rounded">1</button>
+                  <button className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded">2</button>
+                  <button className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded">3</button>
+                  <button className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700">›</button>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <button className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700">‹</button>
-                <button className="px-3 py-2 text-sm bg-blue-500 text-white rounded">1</button>
-                <button className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded">2</button>
-                <button className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded">3</button>
-                <button className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700">›</button>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
