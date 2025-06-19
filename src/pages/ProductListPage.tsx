@@ -33,8 +33,8 @@ const ProductListPage: React.FC<ProductListPageProps> = ({
   const [sortBy, setSortBy] = useState('Featured');
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>(['Samsung', 'Apple', 'Pocco']);
-  const [selectedFeatures, setSelectedFeatures] = useState<string[]>(['Metallic']);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(['samsung', 'apple', 'pocco']);
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>(['metallic', 'plastic-cover']);
   const [selectedRatings, setSelectedRatings] = useState<string[]>(['4star', '3star']);
   const [email, setEmail] = useState('');
   const [expandedSections, setExpandedSections] = useState<string[]>(['category', 'brands', 'features']);
@@ -82,7 +82,7 @@ const ProductListPage: React.FC<ProductListPageProps> = ({
       description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit',
       category: 'smartphones',
       brand: 'pocco',
-      features: ['plastic', '4star']
+      features: ['plastic-cover', '4star']
     },
     {
       id: '3',
@@ -208,15 +208,15 @@ const ProductListPage: React.FC<ProductListPageProps> = ({
     // Apply features filter
     if (selectedFeatures.length > 0) {
       filtered = filtered.filter(product =>
-        selectedFeatures.some(feature =>
+        selectedFeatures.some(selectedFeature =>
           product.features.some(productFeature =>
-            productFeature.toLowerCase() === feature.toLowerCase()
+            productFeature.toLowerCase() === selectedFeature.toLowerCase()
           )
         )
       );
     }
 
-    // Apply ratings filter - Fixed logic to check product rating against selected star ratings
+    // Apply ratings filter
     if (selectedRatings.length > 0) {
       filtered = filtered.filter(product => {
         const productRating = Math.floor(product.rating);
@@ -257,9 +257,18 @@ const ProductListPage: React.FC<ProductListPageProps> = ({
     if (searchQuery.trim()) {
       filters.push(`Search: "${searchQuery}"`);
     }
-    selectedBrands.forEach(brand => filters.push(brand));
-    selectedFeatures.forEach(feature => filters.push(feature));
-    selectedRatings.forEach(rating => filters.push(rating));
+    selectedBrands.forEach(brand => {
+      const brandLabel = brands.find(b => b.id === brand)?.label || brand;
+      filters.push(brandLabel);
+    });
+    selectedFeatures.forEach(feature => {
+      const featureLabel = features.find(f => f.id === feature)?.label || feature;
+      filters.push(featureLabel);
+    });
+    selectedRatings.forEach(rating => {
+      const ratingLabel = ratings.find(r => r.id === rating)?.label || rating;
+      filters.push(ratingLabel);
+    });
     return filters;
   }, [searchQuery, selectedBrands, selectedFeatures, selectedRatings]);
 
@@ -298,12 +307,27 @@ const ProductListPage: React.FC<ProductListPageProps> = ({
   const removeFilter = (filter: string) => {
     if (filter.startsWith('Search:')) {
       setSearchQuery('');
-    } else if (selectedBrands.includes(filter)) {
-      toggleBrand(filter);
-    } else if (selectedFeatures.includes(filter)) {
-      toggleFeature(filter);
-    } else if (selectedRatings.includes(filter)) {
-      toggleRating(filter);
+    } else {
+      // Check if it's a brand filter
+      const brand = brands.find(b => b.label === filter);
+      if (brand) {
+        toggleBrand(brand.id);
+        return;
+      }
+      
+      // Check if it's a feature filter
+      const feature = features.find(f => f.label === filter);
+      if (feature) {
+        toggleFeature(feature.id);
+        return;
+      }
+      
+      // Check if it's a rating filter
+      const rating = ratings.find(r => r.label === filter);
+      if (rating) {
+        toggleRating(rating.id);
+        return;
+      }
     }
   };
 
