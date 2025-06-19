@@ -27,13 +27,15 @@ interface HeaderProps {
   languageOptions: string[];
   shippingOptions: { country: string; flag: string }[];
   onHomeClick: () => void;
-  onSearchClick: () => void;
+  onSearchClick: (query?: string) => void;
   onCartClick: () => void;
   onWishlistClick: () => void;
   onProfileClick: () => void;
   onMessagesClick: () => void;
   isMobileMenuOpen: boolean;
   setIsMobileMenuOpen: (open: boolean) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -58,8 +60,20 @@ const Header: React.FC<HeaderProps> = ({
   onMessagesClick,
   isMobileMenuOpen,
   setIsMobileMenuOpen,
+  searchQuery,
+  setSearchQuery,
 }) => {
   const { state } = useApp();
+
+  const handleSearch = () => {
+    onSearchClick(searchQuery);
+  };
+
+  const handleSearchKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
   
   return (
     <header className="bg-white shadow-sm">
@@ -91,10 +105,13 @@ const Header: React.FC<HeaderProps> = ({
                 <input
                   type="text"
                   placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleSearchKeyPress}
                   className="w-80 px-4 py-2 border-t border-b border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button
-                  onClick={onSearchClick}
+                  onClick={handleSearch}
                   className="bg-blue-500 text-white px-6 py-2 rounded-r hover:bg-blue-600 transition-colors"
                 >
                   Search
@@ -104,7 +121,7 @@ const Header: React.FC<HeaderProps> = ({
 
             {/* Mobile Search Button */}
             <button
-              onClick={onSearchClick}
+              onClick={() => onSearchClick()}
               className="lg:hidden p-2 text-gray-600 hover:text-blue-500"
             >
               <Search className="w-5 h-5" />
@@ -244,10 +261,13 @@ const Header: React.FC<HeaderProps> = ({
                 <input
                   type="text"
                   placeholder="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleSearchKeyPress}
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button
-                  onClick={onSearchClick}
+                  onClick={handleSearch}
                   className="bg-blue-500 text-white px-6 py-2 rounded-r hover:bg-blue-600 transition-colors"
                 >
                   Search
@@ -506,6 +526,8 @@ function AppContent() {
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState('United States');
   const [countries] = useState(['United States', 'France', 'Germany', 'United Kingdom', 'Italy', 'China']);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [initialSearchQuery, setInitialSearchQuery] = useState('');
 
   const categories = [
     'All category',
@@ -631,7 +653,10 @@ function AppContent() {
     setIsMobileMenuOpen(false);
   };
 
-  const handleNavigateToProducts = () => {
+  const handleNavigateToProducts = (query?: string) => {
+    if (query) {
+      setInitialSearchQuery(query);
+    }
     setCurrentPage('products');
     setIsMobileMenuOpen(false);
   };
@@ -684,6 +709,8 @@ function AppContent() {
     onMessagesClick: handleNavigateToMessages,
     isMobileMenuOpen,
     setIsMobileMenuOpen,
+    searchQuery,
+    setSearchQuery,
   };
 
   // Common footer props
@@ -772,7 +799,11 @@ function AppContent() {
     return (
       <div className="min-h-screen bg-gray-50">
         <Header {...headerProps} />
-        <ProductListPage onProductClick={handleProductClick} />
+        <ProductListPage 
+          onProductClick={handleProductClick} 
+          initialSearchQuery={initialSearchQuery}
+          onSearchQueryChange={setInitialSearchQuery}
+        />
         {(showLanguageDropdown || showShippingDropdown) && (
           <div
             className="fixed inset-0 z-40"
@@ -809,7 +840,7 @@ function AppContent() {
                 {categories.map((category) => (
                   <li key={category}>
                     <button
-                      onClick={handleNavigateToProducts}
+                      onClick={() => handleNavigateToProducts()}
                       className="text-gray-600 hover:text-blue-500 text-sm text-left w-full"
                     >
                       {category}
@@ -827,7 +858,7 @@ function AppContent() {
                   <h2 className="text-xl lg:text-2xl font-bold mb-2 text-black">Latest trending</h2>
                   <h3 className="text-lg lg:text-xl mb-4 text-black">Electronic items</h3>
                   <button
-                    onClick={handleNavigateToProducts}
+                    onClick={() => handleNavigateToProducts()}
                     className="bg-white text-black text-teal-500 px-4 lg:px-6 py-2 rounded font-medium hover:bg-gray-100 transition-colors"
                   >
                     Learn more
@@ -877,7 +908,7 @@ function AppContent() {
               </div>
               <div className="grid grid-cols-3 md:grid-cols-5 gap-3 lg:gap-4">
                 {deals.map((deal, index) => (
-                  <div key={index} className="text-center group cursor-pointer" onClick={handleNavigateToProducts}>
+                  <div key={index} className="text-center group cursor-pointer" onClick={() => handleNavigateToProducts()}>
                     <div className="relative mb-3">
                       <div className="w-16 h-16 lg:w-24 lg:h-24 bg-gray-100 rounded-lg mx-auto overflow-hidden">
                         <img
@@ -909,7 +940,7 @@ function AppContent() {
                   <div className="relative z-10">
                     <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-2">Home and outdoor</h3>
                     <button
-                      onClick={handleNavigateToProducts}
+                      onClick={() => handleNavigateToProducts()}
                       className="bg-white text-gray-900 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
                     >
                       Source now
@@ -920,7 +951,7 @@ function AppContent() {
                 <div className="lg:col-span-2 p-3 lg:p-4">
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-3 h-full">
                     {homeProducts.map((product, index) => (
-                      <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
+                      <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={() => handleNavigateToProducts()}>
                         <div className="w-full h-12 lg:h-16 bg-gray-50 rounded mb-2 overflow-hidden">
                           <img
                             src={product.image}
@@ -950,7 +981,7 @@ function AppContent() {
                   <div className="relative z-10">
                     <h3 className="text-lg lg:text-xl font-bold text-gray-900 mb-2">Consumer electronics and gadgets</h3>
                     <button
-                      onClick={handleNavigateToProducts}
+                      onClick={() => handleNavigateToProducts()}
                       className="bg-white text-gray-900 px-4 py-2 rounded text-sm font-medium hover:bg-gray-100 transition-colors"
                     >
                       Source now
@@ -961,7 +992,7 @@ function AppContent() {
                 <div className="lg:col-span-2 p-3 lg:p-4">
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-3 h-full">
                     {electronicsProducts.map((product, index) => (
-                      <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
+                      <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={() => handleNavigateToProducts()}>
                         <div className="w-full h-12 lg:h-16 bg-gray-50 rounded mb-2 overflow-hidden">
                           <img
                             src={product.image}
@@ -1017,7 +1048,7 @@ function AppContent() {
               <h3 className="text-lg lg:text-xl font-semibold mb-6">Recommended items</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
                 {recommendedItems.map((item, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-3 lg:p-4 hover:shadow-md transition-shadow group cursor-pointer" onClick={handleNavigateToProducts}>
+                  <div key={index} className="border border-gray-200 rounded-lg p-3 lg:p-4 hover:shadow-md transition-shadow group cursor-pointer" onClick={() => handleNavigateToProducts()}>
                     <div className="w-full h-24 lg:h-32 bg-gray-100 rounded mb-3 overflow-hidden">
                       <img
                         src={item.image}

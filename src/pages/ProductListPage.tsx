@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Grid, List, ChevronDown, Filter, Facebook, Twitter, Linkedin, Instagram, Youtube, Heart, Star, Menu, X, Search } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import FlagIcon from '../components/FlagIcon';
@@ -20,13 +20,19 @@ interface Product {
 
 interface ProductListPageProps {
   onProductClick: (productId: string) => void;
+  initialSearchQuery?: string;
+  onSearchQueryChange?: (query: string) => void;
 }
 
-const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => {
+const ProductListPage: React.FC<ProductListPageProps> = ({ 
+  onProductClick, 
+  initialSearchQuery = '',
+  onSearchQueryChange 
+}) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('Featured');
   const [verifiedOnly, setVerifiedOnly] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [selectedBrands, setSelectedBrands] = useState<string[]>(['Samsung', 'Apple', 'Pocco']);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>(['Metallic']);
   const [selectedRatings, setSelectedRatings] = useState<string[]>(['4star', '3star']);
@@ -35,6 +41,20 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
   const [selectedCountry, setSelectedCountry] = useState('United States');
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // Update search query when initialSearchQuery changes
+  useEffect(() => {
+    if (initialSearchQuery !== searchQuery) {
+      setSearchQuery(initialSearchQuery);
+    }
+  }, [initialSearchQuery]);
+
+  // Notify parent when search query changes
+  useEffect(() => {
+    if (onSearchQueryChange) {
+      onSearchQueryChange(searchQuery);
+    }
+  }, [searchQuery, onSearchQueryChange]);
 
   const allProducts: Product[] = [
     {
@@ -196,15 +216,15 @@ const ProductListPage: React.FC<ProductListPageProps> = ({ onProductClick }) => 
       );
     }
 
-    // Apply ratings filter
+    // Apply ratings filter - Fixed logic to check product rating against selected star ratings
     if (selectedRatings.length > 0) {
-      filtered = filtered.filter(product =>
-        selectedRatings.some(rating =>
-          product.features.some(productFeature =>
-            productFeature.toLowerCase() === rating.toLowerCase()
-          )
-        )
-      );
+      filtered = filtered.filter(product => {
+        const productRating = Math.floor(product.rating);
+        return selectedRatings.some(rating => {
+          const ratingNumber = parseInt(rating.replace('star', ''));
+          return productRating >= ratingNumber;
+        });
+      });
     }
 
     // Apply sorting
