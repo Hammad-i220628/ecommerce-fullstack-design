@@ -22,13 +22,7 @@ type AppAction =
   | { type: 'MARK_MESSAGE_READ'; payload: string };
 
 const initialState: AppState = {
-  user: {
-    id: '1',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    avatar: '/profile.jpg',
-    joinDate: new Date('2023-01-15')
-  },
+  user: null, // Start with no user logged in
   cart: [],
   wishlist: [
     {

@@ -578,13 +578,15 @@ function AppContent() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
 
-  // Check for existing authentication on app load
+  // Check for existing authentication on app load and sync with context
   useEffect(() => {
     const user = authService.getCurrentUser();
     if (user) {
       setCurrentUser(user);
+      // Sync the authenticated user with the app context
+      dispatch({ type: 'SET_USER', payload: user });
     }
-  }, []);
+  }, [dispatch]);
 
   const categories = [
     'All category',
@@ -699,16 +701,22 @@ function AppContent() {
   const handleLogin = async (email: string, password: string) => {
     const user = await authService.login({ email, password });
     setCurrentUser(user);
+    // Update the app context with the authenticated user
+    dispatch({ type: 'SET_USER', payload: user });
   };
 
   const handleSignup = async (name: string, email: string, password: string) => {
     const user = await authService.signup({ name, email, password });
     setCurrentUser(user);
+    // Update the app context with the authenticated user
+    dispatch({ type: 'SET_USER', payload: user });
   };
 
   const handleLogout = () => {
     authService.logout();
     setCurrentUser(null);
+    // Clear user from app context
+    dispatch({ type: 'SET_USER', payload: null });
     setCurrentPage('home');
   };
 
