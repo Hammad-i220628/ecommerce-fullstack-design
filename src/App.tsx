@@ -882,6 +882,9 @@ function AppContent() {
                   <button className="w-full text-blue-500 py-2 text-sm hover:underline">
                     Log in
                   </button>
+                  <button className="w-full text-blue-500 py-2 text-sm hover:underline">
+                          Sign up
+                  </button>
                 </div>
 
                 <div className="bg-orange-500 text-white rounded-lg p-4">
