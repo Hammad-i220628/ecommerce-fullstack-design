@@ -8,6 +8,7 @@ export interface User {
   email: string;
   avatar?: string;
   joinDate: Date;
+  role?: 'user' | 'admin';
 }
 
 export interface AuthResponse {
@@ -113,7 +114,7 @@ class AuthService {
   private async simulateLogin(credentials: LoginCredentials): Promise<AuthResponse> {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        // Simulate different users
+        // Simulate different users including admin
         const users = [
           {
             email: 'john@example.com',
@@ -123,7 +124,19 @@ class AuthService {
               name: 'John Doe',
               email: 'john@example.com',
               avatar: '/profile.jpg',
-              joinDate: new Date('2023-01-15')
+              joinDate: new Date('2023-01-15'),
+              role: 'user' as const
+            }
+          },
+          {
+            email: 'admin@example.com',
+            password: 'admin123',
+            user: {
+              id: 'admin1',
+              name: 'Admin User',
+              email: 'admin@example.com',
+              joinDate: new Date('2023-01-01'),
+              role: 'admin' as const
             }
           },
           {
@@ -133,7 +146,8 @@ class AuthService {
               id: '2',
               name: 'Jane Smith',
               email: 'jane@example.com',
-              joinDate: new Date('2023-02-20')
+              joinDate: new Date('2023-02-20'),
+              role: 'user' as const
             }
           }
         ];
@@ -166,7 +180,8 @@ class AuthService {
           id: `user_${Date.now()}`,
           name: credentials.name,
           email: credentials.email,
-          joinDate: new Date()
+          joinDate: new Date(),
+          role: 'user'
         };
 
         const token = `jwt_token_${newUser.id}_${Date.now()}`;

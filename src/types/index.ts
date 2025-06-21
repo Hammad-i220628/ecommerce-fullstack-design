@@ -37,6 +37,7 @@ export interface User {
   email: string;
   avatar?: string;
   joinDate: Date;
+  role?: 'user' | 'admin';
 }
 
 export interface Message {

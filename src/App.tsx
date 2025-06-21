@@ -8,12 +8,15 @@ import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
 import ProfilePage from './pages/ProfilePage';
 import MessagesPage from './pages/MessagesPage';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminProductForm from './pages/AdminProductForm';
+import AdminRoute from './components/AdminRoute';
 import AuthModal from './components/AuthModal';
 import { AppProvider, useApp } from './context/AppContext';
 import { authService } from './services/auth';
 import type { User as AuthUser } from './services/auth';
 
-type CurrentPage = 'home' | 'products' | 'product-detail' | 'cart' | 'wishlist' | 'profile' | 'messages';
+type CurrentPage = 'home' | 'products' | 'product-detail' | 'cart' | 'wishlist' | 'profile' | 'messages' | 'admin' | 'admin-product-form';
 
 interface HeaderProps {
   selectedCategory: string;
@@ -35,6 +38,7 @@ interface HeaderProps {
   onWishlistClick: () => void;
   onProfileClick: () => void;
   onMessagesClick: () => void;
+  onAdminClick: () => void;
   isMobileMenuOpen: boolean;
   setIsMobileMenuOpen: (open: boolean) => void;
   searchQuery: string;
@@ -65,6 +69,7 @@ const Header: React.FC<HeaderProps> = ({
   onWishlistClick,
   onProfileClick,
   onMessagesClick,
+  onAdminClick,
   isMobileMenuOpen,
   setIsMobileMenuOpen,
   searchQuery,
@@ -241,6 +246,17 @@ const Header: React.FC<HeaderProps> = ({
                 )}
               </button>
 
+              {/* Admin Button - Only show for admin users */}
+              {currentUser?.role === 'admin' && (
+                <button 
+                  onClick={onAdminClick}
+                  className="hidden lg:flex items-center space-x-1 bg-purple-500 text-white px-3 py-1 rounded text-sm hover:bg-purple-600 transition-colors"
+                  title="Admin Panel"
+                >
+                  <span>Admin</span>
+                </button>
+              )}
+
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -352,7 +368,18 @@ const Header: React.FC<HeaderProps> = ({
                   <div className="flex items-center space-x-2 text-gray-700">
                     <User className="w-5 h-5" />
                     <span>{currentUser.name}</span>
+                    {currentUser.role === 'admin' && (
+                      <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Admin</span>
+                    )}
                   </div>
+                  {currentUser.role === 'admin' && (
+                    <button
+                      onClick={onAdminClick}
+                      className="block w-full text-left text-purple-600 hover:text-purple-800"
+                    >
+                      Admin Panel
+                    </button>
+                  )}
                   <button
                     onClick={onLogout}
                     className="block text-gray-500 hover:text-gray-700"
@@ -769,6 +796,25 @@ function AppContent() {
     setIsMobileMenuOpen(false);
   };
 
+  const handleNavigateToAdmin = () => {
+    setCurrentPage('admin');
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleAdminProductEdit = (productId: string) => {
+    setSelectedProductId(productId);
+    setCurrentPage('admin-product-form');
+  };
+
+  const handleAdminProductCreate = () => {
+    setSelectedProductId('');
+    setCurrentPage('admin-product-form');
+  };
+
+  const handleAdminProductSave = () => {
+    setCurrentPage('admin');
+  };
+
   const handleCountrySelect = (country: string) => {
     setSelectedCountry(country);
     setShowCountryDropdown(false);
@@ -795,6 +841,7 @@ function AppContent() {
     onWishlistClick: handleNavigateToWishlist,
     onProfileClick: handleNavigateToProfile,
     onMessagesClick: handleNavigateToMessages,
+    onAdminClick: handleNavigateToAdmin,
     isMobileMenuOpen,
     setIsMobileMenuOpen,
     searchQuery,
@@ -815,6 +862,70 @@ function AppContent() {
   };
 
   // Render different pages based on current page
+  if (currentPage === 'admin') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header {...headerProps} />
+        <AdminRoute>
+          <AdminDashboard 
+            onBackToHome={handleBackToHome}
+            onProductEdit={handleAdminProductEdit}
+            onProductCreate={handleAdminProductCreate}
+          />
+        </AdminRoute>
+        {(showLanguageDropdown || showShippingDropdown) && (
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => {
+              setShowLanguageDropdown(false);
+              setShowShippingDropdown(false);
+            }}
+          />
+        )}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          mode={authMode}
+          onModeChange={setAuthMode}
+          onLogin={handleLogin}
+          onSignup={handleSignup}
+        />
+      </div>
+    );
+  }
+
+  if (currentPage === 'admin-product-form') {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header {...headerProps} />
+        <AdminRoute>
+          <AdminProductForm 
+            productId={selectedProductId || undefined}
+            onBack={() => setCurrentPage('admin')}
+            onSave={handleAdminProductSave}
+          />
+        </AdminRoute>
+        {(showLanguageDropdown || showShippingDropdown) && (
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => {
+              setShowLanguageDropdown(false);
+              setShowShippingDropdown(false);
+            }}
+          />
+        )}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          mode={authMode}
+          onModeChange={setAuthMode}
+          onLogin={handleLogin}
+          onSignup={handleSignup}
+        />
+      </div>
+    );
+  }
+
   if (currentPage === 'cart') {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -1026,12 +1137,25 @@ function AppContent() {
                       </div>
                       <p className="text-sm text-gray-600 mb-2">Welcome back,</p>
                       <p className="text-sm font-medium mb-3">{currentUser.name}</p>
+                      {currentUser.role === 'admin' && (
+                        <span className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded mb-3">
+                          Admin
+                        </span>
+                      )}
                       <button
                         onClick={() => setCurrentPage('profile')}
                         className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors text-sm mb-2"
                       >
                         View Profile
                       </button>
+                      {currentUser.role === 'admin' && (
+                        <button
+                          onClick={handleNavigateToAdmin}
+                          className="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600 transition-colors text-sm mb-2"
+                        >
+                          Admin Panel
+                        </button>
+                      )}
                       <button
                         onClick={handleLogout}
                         className="w-full text-blue-500 py-2 text-sm hover:underline"
