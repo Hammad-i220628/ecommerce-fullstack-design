@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, User, Heart, ShoppingCart, Menu, ChevronDown, Star, MapPin, Truck, Shield, Eye, MessageSquare, X } from 'lucide-react';
 import { Facebook, Twitter, Linkedin, Instagram, Youtube } from 'lucide-react';
 import FlagIcon from './components/FlagIcon';
@@ -8,7 +8,10 @@ import CartPage from './pages/CartPage';
 import WishlistPage from './pages/WishlistPage';
 import ProfilePage from './pages/ProfilePage';
 import MessagesPage from './pages/MessagesPage';
+import AuthModal from './components/AuthModal';
 import { AppProvider, useApp } from './context/AppContext';
+import { authService } from './services/auth';
+import type { User as AuthUser } from './services/auth';
 
 type CurrentPage = 'home' | 'products' | 'product-detail' | 'cart' | 'wishlist' | 'profile' | 'messages';
 
@@ -36,6 +39,10 @@ interface HeaderProps {
   setIsMobileMenuOpen: (open: boolean) => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  currentUser: AuthUser | null;
+  onLogin: () => void;
+  onSignup: () => void;
+  onLogout: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -62,6 +69,10 @@ const Header: React.FC<HeaderProps> = ({
   setIsMobileMenuOpen,
   searchQuery,
   setSearchQuery,
+  currentUser,
+  onLogin,
+  onSignup,
+  onLogout,
 }) => {
   const { state } = useApp();
 
@@ -333,6 +344,39 @@ const Header: React.FC<HeaderProps> = ({
                 )}
               </div>
             </div>
+
+            {/* Mobile Auth Section */}
+            <div className="pt-4 border-t border-gray-200">
+              {currentUser ? (
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2 text-gray-700">
+                    <User className="w-5 h-5" />
+                    <span>{currentUser.name}</span>
+                  </div>
+                  <button
+                    onClick={onLogout}
+                    className="block text-gray-500 hover:text-gray-700"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <button
+                    onClick={onLogin}
+                    className="block w-full text-left text-blue-500 hover:text-blue-600"
+                  >
+                    Log in
+                  </button>
+                  <button
+                    onClick={onSignup}
+                    className="block w-full text-left text-blue-500 hover:text-blue-600"
+                  >
+                    Sign up
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -528,6 +572,19 @@ function AppContent() {
   const [countries] = useState(['United States', 'France', 'Germany', 'United Kingdom', 'Italy', 'China']);
   const [searchQuery, setSearchQuery] = useState('');
   const [initialSearchQuery, setInitialSearchQuery] = useState('');
+  
+  // Authentication state
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+
+  // Check for existing authentication on app load
+  useEffect(() => {
+    const user = authService.getCurrentUser();
+    if (user) {
+      setCurrentUser(user);
+    }
+  }, []);
 
   const categories = [
     'All category',
@@ -638,6 +695,29 @@ function AppContent() {
     { country: 'United States', flag: '🇺🇸', name: 'shopname.us' }
   ];
 
+  // Authentication handlers
+  const handleLogin = async (email: string, password: string) => {
+    const user = await authService.login({ email, password });
+    setCurrentUser(user);
+  };
+
+  const handleSignup = async (name: string, email: string, password: string) => {
+    const user = await authService.signup({ name, email, password });
+    setCurrentUser(user);
+  };
+
+  const handleLogout = () => {
+    authService.logout();
+    setCurrentUser(null);
+    setCurrentPage('home');
+  };
+
+  const openAuthModal = (mode: 'login' | 'signup') => {
+    setAuthMode(mode);
+    setShowAuthModal(true);
+    setIsMobileMenuOpen(false);
+  };
+
   const handleProductClick = (productId: string) => {
     setSelectedProductId(productId);
     setCurrentPage('product-detail');
@@ -711,6 +791,10 @@ function AppContent() {
     setIsMobileMenuOpen,
     searchQuery,
     setSearchQuery,
+    currentUser,
+    onLogin: () => openAuthModal('login'),
+    onSignup: () => openAuthModal('signup'),
+    onLogout: handleLogout,
   };
 
   // Common footer props
@@ -737,6 +821,14 @@ function AppContent() {
             }}
           />
         )}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          mode={authMode}
+          onModeChange={setAuthMode}
+          onLogin={handleLogin}
+          onSignup={handleSignup}
+        />
       </div>
     );
   }
@@ -755,6 +847,14 @@ function AppContent() {
             }}
           />
         )}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          mode={authMode}
+          onModeChange={setAuthMode}
+          onLogin={handleLogin}
+          onSignup={handleSignup}
+        />
       </div>
     );
   }
@@ -773,6 +873,14 @@ function AppContent() {
             }}
           />
         )}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          mode={authMode}
+          onModeChange={setAuthMode}
+          onLogin={handleLogin}
+          onSignup={handleSignup}
+        />
       </div>
     );
   }
@@ -791,6 +899,14 @@ function AppContent() {
             }}
           />
         )}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          mode={authMode}
+          onModeChange={setAuthMode}
+          onLogin={handleLogin}
+          onSignup={handleSignup}
+        />
       </div>
     );
   }
@@ -813,6 +929,14 @@ function AppContent() {
             }}
           />
         )}
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          mode={authMode}
+          onModeChange={setAuthMode}
+          onLogin={handleLogin}
+          onSignup={handleSignup}
+        />
       </div>
     );
   }
@@ -823,6 +947,14 @@ function AppContent() {
         <Header {...headerProps} />
         <ProductDetailPage productId={selectedProductId} onBackToList={handleBackToList} />
         <Footer {...footerProps} />
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+          mode={authMode}
+          onModeChange={setAuthMode}
+          onLogin={handleLogin}
+          onSignup={handleSignup}
+        />
       </div>
     );
   }
@@ -871,20 +1003,55 @@ function AppContent() {
 
               <div className="space-y-4">
                 <div className="bg-white rounded-lg p-4 lg:p-6 text-center border border-gray-200">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <User className="w-6 h-6 text-blue-500" />
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">Hi, user</p>
-                  <p className="text-sm font-medium mb-3">let's get started</p>
-                  <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors text-sm">
-                    Join now
-                  </button>
-                  <button className="w-full text-blue-500 py-2 text-sm hover:underline">
-                    Log in
-                  </button>
-                  <button className="w-full text-blue-500 py-2 text-sm hover:underline">
-                          Sign up
-                  </button>
+                  {currentUser ? (
+                    <div>
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        {currentUser.avatar ? (
+                          <img
+                            src={currentUser.avatar}
+                            alt={currentUser.name}
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        ) : (
+                          <User className="w-6 h-6 text-blue-500" />
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-600 mb-2">Welcome back,</p>
+                      <p className="text-sm font-medium mb-3">{currentUser.name}</p>
+                      <button
+                        onClick={() => setCurrentPage('profile')}
+                        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors text-sm mb-2"
+                      >
+                        View Profile
+                      </button>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-blue-500 py-2 text-sm hover:underline"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <User className="w-6 h-6 text-blue-500" />
+                      </div>
+                      <p className="text-sm text-gray-600 mb-2">Hi, user</p>
+                      <p className="text-sm font-medium mb-3">let's get started</p>
+                      <button
+                        onClick={() => openAuthModal('signup')}
+                        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors text-sm mb-2"
+                      >
+                        Join now
+                      </button>
+                      <button
+                        onClick={() => openAuthModal('login')}
+                        className="w-full text-blue-500 py-2 text-sm hover:underline"
+                      >
+                        Log in
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="bg-orange-500 text-white rounded-lg p-4">
@@ -1134,6 +1301,15 @@ function AppContent() {
       </section>
 
       <Footer {...footerProps} />
+      
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        mode={authMode}
+        onModeChange={setAuthMode}
+        onLogin={handleLogin}
+        onSignup={handleSignup}
+      />
     </div>
   );
 }
