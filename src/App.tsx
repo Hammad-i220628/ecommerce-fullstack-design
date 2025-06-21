@@ -249,13 +249,14 @@ const Header: React.FC<HeaderProps> = ({
               {/* Admin Button - Only show for admin users */}
               {currentUser?.role === 'admin' && (
                 <button 
-                  onClick={onAdminClick}
-                  className="hidden lg:flex items-center space-x-1 bg-purple-500 text-white px-3 py-1 rounded text-sm hover:bg-purple-600 transition-colors"
-                  title="Admin Panel"
+                onClick={onAdminClick}
+                className="hidden lg:flex items-center whitespace-nowrap space-x-1 bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors"
+                title="Admin Panel"
                 >
-                  <span>Admin</span>
-                </button>
-              )}
+                <span>Admin Panel</span>
+                  </button>
+                )
+              }
 
               {/* Mobile Menu Button */}
               <button
@@ -369,7 +370,7 @@ const Header: React.FC<HeaderProps> = ({
                     <User className="w-5 h-5" />
                     <span>{currentUser.name}</span>
                     {currentUser.role === 'admin' && (
-                      <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Admin</span>
+                      <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">n</span>
                     )}
                   </div>
                   {currentUser.role === 'admin' && (
@@ -1105,7 +1106,7 @@ function AppContent() {
           <div className="lg:col-span-3 space-y-1 lg:space-y-2 order-1 lg:order-2">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-1 lg:gap-6">
               <div className="md:col-span-2 bg-gradient-to-r from-emerald-200 to-teal-400 rounded-lg p-6 lg:p-8 text-white relative overflow-hidden">
-                <div className="relative z-5">
+                <div className="relative z-10 w-full pr-1">
                   <h2 className="text-xl lg:text-2xl font-bold mb-2 text-black">Latest trending</h2>
                   <h3 className="text-lg lg:text-xl mb-4 text-black">Electronic items</h3>
                   <button
@@ -1115,7 +1116,7 @@ function AppContent() {
                     Learn more
                   </button>
                 </div>
-                <div className="absolute right-0 top-0 w-50 lg:w-190 h-full">
+                <div className="absolute right-0 top-0 w-50 lg:w-85 h-full">
                   <img src="/headphone.png" alt="Electronics" className="w-full h-full object-cover opacity-80" />
                 </div>
               </div>
@@ -1137,25 +1138,13 @@ function AppContent() {
                       </div>
                       <p className="text-sm text-gray-600 mb-2">Welcome back,</p>
                       <p className="text-sm font-medium mb-3">{currentUser.name}</p>
-                      {currentUser.role === 'admin' && (
-                        <span className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded mb-3">
-                          Admin
-                        </span>
-                      )}
+                      
                       <button
                         onClick={() => setCurrentPage('profile')}
                         className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors text-sm mb-2"
                       >
                         View Profile
                       </button>
-                      {currentUser.role === 'admin' && (
-                        <button
-                          onClick={handleNavigateToAdmin}
-                          className="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600 transition-colors text-sm mb-2"
-                        >
-                          Admin Panel
-                        </button>
-                      )}
                       <button
                         onClick={handleLogout}
                         className="w-full text-blue-500 py-2 text-sm hover:underline"
