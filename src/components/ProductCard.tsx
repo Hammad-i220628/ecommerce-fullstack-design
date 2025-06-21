@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Heart, Star } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -25,8 +25,10 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductClick }) => {
   const { state, dispatch } = useApp();
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   
   const isInWishlist = state.wishlist.some(item => item.product.id === product.id);
+  const isLoggedIn = !!state.user;
 
   const toggleWishlist = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -40,15 +42,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
     }
   };
 
-  const addToCart = (e: React.MouseEvent) => {
+  const handleActionClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    dispatch({ 
-      type: 'ADD_TO_CART', 
-      payload: { 
-        product, 
-        quantity: 1 
-      } 
-    });
+    
+    if (isLoggedIn) {
+      // User is logged in, add to cart
+      dispatch({ 
+        type: 'ADD_TO_CART', 
+        payload: { 
+          product, 
+          quantity: 1 
+        } 
+      });
+    } else {
+      // User is not logged in, show login prompt
+      setShowLoginPrompt(true);
+      setTimeout(() => setShowLoginPrompt(false), 3000); // Hide after 3 seconds
+    }
   };
 
   const renderStars = (rating: number) => {
@@ -64,7 +74,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
 
   if (viewMode === 'list') {
     return (
-      <div className="bg-white border-b border-gray-200 p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+      <div className="bg-white border-b border-gray-200 p-4 hover:bg-gray-50 transition-colors cursor-pointer relative">
+        {/* Login Prompt Overlay */}
+        {showLoginPrompt && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10 rounded">
+            <div className="bg-white p-4 rounded-lg shadow-lg text-center">
+              <p className="text-gray-800 font-medium mb-2">Please login first</p>
+              <p className="text-sm text-gray-600">You need to login to add items to cart</p>
+            </div>
+          </div>
+        )}
+        
         <div className="flex space-x-4">
           <div className="w-20 h-20 bg-gray-100 rounded overflow-hidden flex-shrink-0">
             <img
@@ -118,10 +138,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
                   <Heart className={`w-5 h-5 ${isInWishlist ? 'fill-current' : ''}`} />
                 </button>
                 <button
-                  onClick={addToCart}
-                  className="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors"
+                  onClick={handleActionClick}
+                  className={`px-3 py-1 rounded text-sm transition-colors ${
+                    isLoggedIn 
+                      ? 'bg-blue-500 text-white hover:bg-blue-600' 
+                      : 'bg-gray-500 text-white hover:bg-gray-600'
+                  }`}
                 >
-                  Add to Cart
+                  {isLoggedIn ? 'Add to Cart' : 'Send Inquiry'}
                 </button>
               </div>
             </div>
@@ -132,7 +156,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded p-4 hover:shadow-md transition-shadow group cursor-pointer">
+    <div className="bg-white border border-gray-200 rounded p-4 hover:shadow-md transition-shadow group cursor-pointer relative">
+      {/* Login Prompt Overlay */}
+      {showLoginPrompt && (
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10 rounded">
+          <div className="bg-white p-4 rounded-lg shadow-lg text-center">
+            <p className="text-gray-800 font-medium mb-2">Please login first</p>
+            <p className="text-sm text-gray-600">You need to login to add items to cart</p>
+          </div>
+        </div>
+      )}
+      
       <div className="relative mb-3">
         <div className="w-full h-48 bg-gray-100 rounded overflow-hidden">
           <img
@@ -173,10 +207,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
           {product.name}
         </h3>
         <button
-          onClick={addToCart}
-          className="w-full bg-blue-500 text-white py-2 rounded text-sm hover:bg-blue-600 transition-colors"
+          onClick={handleActionClick}
+          className={`w-full py-2 rounded text-sm transition-colors ${
+            isLoggedIn 
+              ? 'bg-blue-500 text-white hover:bg-blue-600' 
+              : 'bg-gray-500 text-white hover:bg-gray-600'
+          }`}
         >
-          Add to Cart
+          {isLoggedIn ? 'Add to Cart' : 'Send Inquiry'}
         </button>
       </div>
     </div>
