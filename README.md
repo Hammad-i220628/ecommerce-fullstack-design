@@ -1,6 +1,6 @@
 # E-commerce Platform
 
-A full-stack e-commerce platform built with **React (frontend)**, **Node.js/Express (backend)**, and **MongoDB (database)**. It features user authentication, product management, real-time messaging, and admin tools.
+A full-stack e-commerce platform built with **React (frontend)**, **Node.js/Express (backend)**, and **MongoDB (database)**. It features user authentication, product management, and admin tools.
 
 ---
 
