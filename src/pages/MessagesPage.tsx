@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Send, Search, MoreVertical, Phone, Video } from 'lucide-react';
+import { ArrowLeft, Send, Search, MoreVertical, Phone, Video, Menu, X } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 interface MessagesPageProps {
@@ -11,6 +11,7 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ onBackToHome }) => {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showConversationsList, setShowConversationsList] = useState(true);
 
   // Mock conversations data
   const conversations = [
@@ -150,6 +151,19 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ onBackToHome }) => {
     }
   };
 
+  const handleConversationSelect = (conversationId: string) => {
+    setSelectedConversation(conversationId);
+    // On mobile, hide conversations list when a conversation is selected
+    if (window.innerWidth < 1024) {
+      setShowConversationsList(false);
+    }
+  };
+
+  const handleBackToConversations = () => {
+    setShowConversationsList(true);
+    setSelectedConversation(null);
+  };
+
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', { 
       hour: '2-digit', 
@@ -174,8 +188,9 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ onBackToHome }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex items-center mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-8">
+        {/* Mobile Header */}
+        <div className="flex items-center justify-between mb-4 lg:mb-8">
           <button
             onClick={onBackToHome}
             className="flex items-center space-x-2 text-blue-600 hover:text-blue-800"
@@ -183,12 +198,25 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ onBackToHome }) => {
             <ArrowLeft className="w-5 h-5" />
             <span>Back to home</span>
           </button>
+          
+          {/* Mobile conversation toggle */}
+          {selectedConv && !showConversationsList && (
+            <button
+              onClick={handleBackToConversations}
+              className="lg:hidden flex items-center space-x-2 text-blue-600 hover:text-blue-800"
+            >
+              <Menu className="w-5 h-5" />
+              <span>Conversations</span>
+            </button>
+          )}
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden" style={{ height: '600px' }}>
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden" style={{ height: 'calc(100vh - 200px)', minHeight: '500px' }}>
           <div className="flex h-full">
             {/* Conversations List */}
-            <div className="w-1/3 border-r border-gray-200 flex flex-col">
+            <div className={`${
+              showConversationsList ? 'flex' : 'hidden'
+            } lg:flex w-full lg:w-1/3 border-r border-gray-200 flex-col`}>
               <div className="p-4 border-b border-gray-200">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Messages</h2>
                 <div className="relative">
@@ -207,13 +235,13 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ onBackToHome }) => {
                 {conversations.map((conversation) => (
                   <div
                     key={conversation.id}
-                    onClick={() => setSelectedConversation(conversation.id)}
-                    className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${
+                    onClick={() => handleConversationSelect(conversation.id)}
+                    className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors ${
                       selectedConversation === conversation.id ? 'bg-blue-50 border-blue-200' : ''
                     }`}
                   >
                     <div className="flex items-center space-x-3">
-                      <div className="relative">
+                      <div className="relative flex-shrink-0">
                         <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
                           <img
                             src={conversation.participant.avatar}
@@ -227,18 +255,18 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ onBackToHome }) => {
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between mb-1">
                           <h3 className="font-medium text-gray-900 truncate">
                             {conversation.participant.name}
                           </h3>
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-500 flex-shrink-0 ml-2">
                             {formatDate(conversation.lastMessage.timestamp)}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 truncate">
+                        <p className="text-sm text-gray-600 truncate mb-1">
                           {conversation.lastMessage.content}
                         </p>
-                        <div className="flex items-center justify-between mt-1">
+                        <div className="flex items-center justify-between">
                           <span className="text-xs text-gray-400">
                             {conversation.participant.lastSeen}
                           </span>
@@ -256,13 +284,23 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ onBackToHome }) => {
             </div>
 
             {/* Chat Area */}
-            <div className="flex-1 flex flex-col">
+            <div className={`${
+              !showConversationsList || selectedConv ? 'flex' : 'hidden'
+            } lg:flex flex-1 flex-col`}>
               {selectedConv ? (
                 <>
                   {/* Chat Header */}
                   <div className="p-4 border-b border-gray-200 flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className="relative">
+                      {/* Mobile back button */}
+                      <button
+                        onClick={handleBackToConversations}
+                        className="lg:hidden p-1 text-gray-600 hover:text-gray-800"
+                      >
+                        <ArrowLeft className="w-5 h-5" />
+                      </button>
+                      
+                      <div className="relative flex-shrink-0">
                         <div className="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
                           <img
                             src={selectedConv.participant.avatar}
@@ -274,21 +312,21 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ onBackToHome }) => {
                           <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                         )}
                       </div>
-                      <div>
-                        <h3 className="font-medium text-gray-900">{selectedConv.participant.name}</h3>
-                        <p className="text-sm text-gray-500">{selectedConv.participant.lastSeen}</p>
+                      <div className="min-w-0">
+                        <h3 className="font-medium text-gray-900 truncate">{selectedConv.participant.name}</h3>
+                        <p className="text-sm text-gray-500 truncate">{selectedConv.participant.lastSeen}</p>
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-1 sm:space-x-2">
                       <button className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100">
-                        <Phone className="w-5 h-5" />
+                        <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
                       <button className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100">
-                        <Video className="w-5 h-5" />
+                        <Video className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
                       <button className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100">
-                        <MoreVertical className="w-5 h-5" />
+                        <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
                     </div>
                   </div>
@@ -301,13 +339,13 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ onBackToHome }) => {
                         className={`flex ${message.senderId === '1' ? 'justify-end' : 'justify-start'}`}
                       >
                         <div
-                          className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                          className={`max-w-[85%] sm:max-w-xs lg:max-w-md px-3 sm:px-4 py-2 rounded-lg ${
                             message.senderId === '1'
                               ? 'bg-blue-500 text-white'
                               : 'bg-gray-200 text-gray-900'
                           }`}
                         >
-                          <p className="text-sm">{message.content}</p>
+                          <p className="text-sm break-words">{message.content}</p>
                           <p className={`text-xs mt-1 ${
                             message.senderId === '1' ? 'text-blue-100' : 'text-gray-500'
                           }`}>
@@ -327,26 +365,26 @@ const MessagesPage: React.FC<MessagesPageProps> = ({ onBackToHome }) => {
                         onChange={(e) => setNewMessage(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                         placeholder="Type your message..."
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="flex-1 px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                       />
                       <button
                         onClick={handleSendMessage}
                         disabled={!newMessage.trim()}
-                        className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0"
                       >
-                        <Send className="w-5 h-5" />
+                        <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
                     </div>
                   </div>
                 </>
               ) : (
-                <div className="flex-1 flex items-center justify-center">
+                <div className="flex-1 flex items-center justify-center p-4">
                   <div className="text-center">
                     <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Send className="w-8 h-8 text-gray-400" />
                     </div>
                     <h3 className="text-lg font-medium text-gray-900 mb-2">Select a conversation</h3>
-                    <p className="text-gray-600">Choose a conversation from the list to start messaging.</p>
+                    <p className="text-gray-600 text-center max-w-sm">Choose a conversation from the list to start messaging.</p>
                   </div>
                 </div>
               )}
