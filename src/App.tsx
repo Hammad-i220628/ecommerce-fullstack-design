@@ -370,7 +370,7 @@ const Header: React.FC<HeaderProps> = ({
                     <User className="w-5 h-5" />
                     <span>{currentUser.name}</span>
                     {currentUser.role === 'admin' && (
-                      <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">n</span>
+                      <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Admin</span>
                     )}
                   </div>
                   {currentUser.role === 'admin' && (
@@ -1103,21 +1103,25 @@ function AppContent() {
             </div>
           </div>
 
-          <div className="lg:col-span-3 space-y-1 lg:space-y-2 order-1 lg:order-2">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-1 lg:gap-6">
-              <div className="md:col-span-2 bg-gradient-to-r from-emerald-200 to-teal-400 rounded-lg p-6 lg:p-8 text-white relative overflow-hidden">
-                <div className="relative z-10 w-full pr-1">
+          <div className="lg:col-span-3 space-y-4 lg:space-y-6 order-1 lg:order-2">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+              <div className="md:col-span-2 bg-gradient-to-r from-emerald-200 to-teal-400 rounded-lg p-6 lg:p-8 text-white relative overflow-hidden min-h-[200px] lg:min-h-[250px]">
+                <div className="relative z-10 flex flex-col justify-center h-full">
                   <h2 className="text-xl lg:text-2xl font-bold mb-2 text-black">Latest trending</h2>
                   <h3 className="text-lg lg:text-xl mb-4 text-black">Electronic items</h3>
                   <button
                     onClick={() => handleNavigateToProducts()}
-                    className="bg-white text-black text-teal-500 px-4 lg:px-6 py-2 rounded font-medium hover:bg-gray-100 transition-colors"
+                    className="bg-white text-black px-4 lg:px-6 py-2 rounded font-medium hover:bg-gray-100 transition-colors w-fit"
                   >
                     Learn more
                   </button>
                 </div>
-                <div className="absolute right-0 top-0 w-50 lg:w-85 h-full">
-                  <img src="/headphone.png" alt="Electronics" className="w-full h-full object-cover opacity-80" />
+                <div className="absolute right-0 top-0 w-32 sm:w-40 md:w-48 lg:w-56 h-full">
+                  <img 
+                    src="/headphone.png" 
+                    alt="Electronics" 
+                    className="w-full h-full object-contain object-right opacity-80" 
+                  />
                 </div>
               </div>
 
@@ -1201,7 +1205,7 @@ function AppContent() {
                 {deals.map((deal, index) => (
                   <div key={index} className="text-center group cursor-pointer" onClick={() => handleNavigateToProducts()}>
                     <div className="relative mb-3">
-                      <div className="w-16 h-16 lg:w-24 lg:h-24 bg-gray-100 rounded-lg mx-auto overflow-hidden">
+                      <div className="w-full aspect-square bg-gray-100 rounded-lg mx-auto overflow-hidden">
                         <img
                           src={deal.image}
                           alt={deal.name}
@@ -1220,7 +1224,7 @@ function AppContent() {
 
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="grid grid-cols-1 lg:grid-cols-3">
-                <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 p-4 lg:p-6 flex flex-col justify-between">
+                <div className="relative bg-gradient-to-br from-orange-100 to-orange-200 p-4 lg:p-6 flex flex-col justify-between min-h-[200px]">
                   <div className="absolute inset-0 opacity-20">
                     <img
                       src="/interior/1.jpg"
@@ -1243,7 +1247,7 @@ function AppContent() {
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-3 h-full">
                     {homeProducts.map((product, index) => (
                       <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={() => handleNavigateToProducts()}>
-                        <div className="w-full h-12 lg:h-16 bg-gray-50 rounded mb-2 overflow-hidden">
+                        <div className="w-full aspect-square bg-gray-50 rounded mb-2 overflow-hidden">
                           <img
                             src={product.image}
                             alt={product.name}
@@ -1261,7 +1265,7 @@ function AppContent() {
 
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
               <div className="grid grid-cols-1 lg:grid-cols-3">
-                <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-4 lg:p-6 flex flex-col justify-between">
+                <div className="relative bg-gradient-to-br from-blue-100 to-purple-200 p-4 lg:p-6 flex flex-col justify-between min-h-[200px]">
                   <div className="absolute inset-0 opacity-20">
                     <img
                       src="/tech/7.jpg"
@@ -1284,7 +1288,7 @@ function AppContent() {
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-3 h-full">
                     {electronicsProducts.map((product, index) => (
                       <div key={index} className="bg-white border border-gray-100 rounded-lg p-2 hover:shadow-md transition-shadow group cursor-pointer" onClick={() => handleNavigateToProducts()}>
-                        <div className="w-full h-12 lg:h-16 bg-gray-50 rounded mb-2 overflow-hidden">
+                        <div className="w-full aspect-square bg-gray-50 rounded mb-2 overflow-hidden">
                           <img
                             src={product.image}
                             alt={product.name}
@@ -1340,7 +1344,7 @@ function AppContent() {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
                 {recommendedItems.map((item, index) => (
                   <div key={index} className="border border-gray-200 rounded-lg p-3 lg:p-4 hover:shadow-md transition-shadow group cursor-pointer" onClick={() => handleNavigateToProducts()}>
-                    <div className="w-full h-24 lg:h-32 bg-gray-100 rounded mb-3 overflow-hidden">
+                    <div className="w-full aspect-square bg-gray-100 rounded mb-3 overflow-hidden">
                       <img
                         src={item.image}
                         alt={item.name}
@@ -1361,7 +1365,7 @@ function AppContent() {
                   const IconComponent = service.icon;
                   return (
                     <div key={index} className="relative rounded-lg overflow-hidden group cursor-pointer">
-                      <div className="h-24 lg:h-32 bg-gray-200 overflow-hidden">
+                      <div className="aspect-[4/3] bg-gray-200 overflow-hidden">
                         <img
                           src={service.image}
                           alt={service.title}
