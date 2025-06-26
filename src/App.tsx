@@ -1116,13 +1116,19 @@ function AppContent() {
                     Learn more
                   </button>
                 </div>
-                <div className="absolute right-0 top-0 w-32 sm:w-40 md:w-48 lg:w-56 h-full">
-                  <img 
-                    src="/headphone.png" 
-                    alt="Electronics" 
-                    className="w-full h-full object-contain object-right opacity-80" 
-                  />
-                </div>
+                <div className="absolute left-[240px] top-1/2 transform -translate-y-1/2 h-[150%] w-[calc(100%-240px)] max-w-[760px] flex items-center justify-end pr-0 overflow-visible">
+  <img 
+    src="/headphone.png" 
+    alt="Electronics" 
+    className="h-full w-full object-contain scale-y-150 scale-x-125 opacity-100" 
+  />
+</div>
+
+
+
+
+
+
               </div>
 
               <div className="space-y-4">
