@@ -86,7 +86,7 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ onBackToHome, onProductClic
             </h1>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
             {state.wishlist.map((item) => (
               <div key={item.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow group relative">
                 <button
@@ -96,11 +96,11 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ onBackToHome, onProductClic
                   <X className="w-4 h-4" />
                 </button>
                 
-                <div className="w-full h-48 bg-gray-100 rounded mb-4 overflow-hidden cursor-pointer">
+                <div className="w-full h-32 sm:h-48 bg-gray-100 rounded mb-4 overflow-hidden cursor-pointer">
                   <img
                     src={item.product.image}
                     alt={item.product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                    className="w-full h-full object-contain p-2 bg-white group-hover:scale-105 transition-transform duration-200"
                     onClick={() => onProductClick(item.product.id)}
                   />
                 </div>
@@ -145,14 +145,14 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ onBackToHome, onProductClic
         {/* Recommended Items */}
         <div className="mt-12">
           <h2 className="text-xl font-bold text-gray-900 mb-6">You might also like</h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="bg-white border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow">
-                <div className="w-full h-24 bg-gray-100 rounded mb-2 overflow-hidden">
+                <div className="w-full h-32 sm:h-40 bg-gray-100 rounded mb-2 overflow-hidden flex items-center justify-center">
                   <img
                     src={`/tech/${i}.jpg`}
                     alt={`Recommended item ${i}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain bg-white"
                   />
                 </div>
                 <div className="text-sm font-medium text-gray-900 mb-1">$99.50</div>

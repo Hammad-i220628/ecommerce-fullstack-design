@@ -90,7 +90,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
             <img
               src={product.image}
               alt={product.name}
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+              className="w-full h-full object-contain p-2 bg-white group-hover:scale-105 transition-transform duration-200"
               onClick={() => onProductClick(product.id)}
             />
           </div>
@@ -172,7 +172,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, viewMode, onProductC
           <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+            className="w-full h-full object-contain p-2 bg-white group-hover:scale-105 transition-transform duration-200"
             onClick={() => onProductClick(product.id)}
           />
         </div>

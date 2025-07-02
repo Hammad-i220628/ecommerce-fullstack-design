@@ -158,23 +158,23 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onBack
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg p-6">
               <div className="mb-4">
-                <div className="w-full h-96 bg-gray-100 rounded-lg overflow-hidden mb-4">
+                <div className="w-full h-96 bg-white rounded-lg overflow-hidden mb-4">
                   <img
                     src={product.images[selectedImage]}
                     alt={product.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
-                <div className="grid grid-cols-6 gap-2">
+                <div className="flex gap-2 overflow-x-auto pb-2 sm:grid sm:grid-cols-6 sm:gap-2 sm:overflow-x-visible">
                   {product.images.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`w-full h-16 bg-gray-100 rounded overflow-hidden border-2 ${
+                      className={`min-w-[4rem] w-16 h-16 bg-white rounded overflow-hidden border-2 ${
                         selectedImage === index ? 'border-blue-500' : 'border-transparent'
                       }`}
                     >
-                      <img src={image} alt="" className="w-full h-full object-cover" />
+                      <img src={image} alt="" className="w-full h-full object-contain" />
                     </button>
                   ))}
                 </div>
@@ -295,7 +295,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onBack
         {/* Product Details Tabs */}
         <div className="bg-white rounded-lg mt-8">
           <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6">
+            <nav className="flex flex-wrap space-x-4 sm:space-x-8 px-2 sm:px-6 overflow-x-auto">
               {['Description', 'Reviews', 'Shipping', 'About seller'].map((tab) => (
                 <button
                   key={tab}
@@ -371,11 +371,11 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onBack
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">You may like</h3>
-                  <div className="space-y-4">
+                  <div className="flex flex-col gap-4">
                     {product.youMayLike.map((item) => (
                       <div key={item.id} className="flex items-center space-x-4 p-3 hover:bg-gray-50 rounded-lg">
-                        <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden flex-shrink-0">
-                          <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                        <div className="w-16 h-16 bg-white rounded overflow-hidden flex-shrink-0 flex items-center justify-center">
+                          <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                         </div>
                         <div className="flex-1">
                           <h4 className="text-sm font-medium text-gray-900">{item.name}</h4>
@@ -393,11 +393,11 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ productId, onBack
         {/* Related Products */}
         <div className="mt-8">
           <h3 className="text-xl font-semibold text-gray-900 mb-6">Related products</h3>
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
             {product.relatedProducts.map((item) => (
               <div key={item.id} className="bg-white rounded-lg p-4 border border-gray-200 hover:shadow-md transition-shadow">
-                <div className="w-full h-24 bg-gray-100 rounded mb-3 overflow-hidden">
-                  <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                <div className="w-full h-24 sm:h-32 bg-white rounded mb-3 overflow-hidden flex items-center justify-center">
+                  <img src={item.image} alt={item.name} className="w-full h-full object-contain" />
                 </div>
                 <h4 className="text-sm font-medium text-gray-900 mb-2 line-clamp-2">{item.name}</h4>
                 <p className="text-sm text-gray-600">{item.price}</p>

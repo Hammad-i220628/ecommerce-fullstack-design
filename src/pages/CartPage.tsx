@@ -103,12 +103,12 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
               <div className="divide-y divide-gray-200">
                 {state.cart.map((item) => (
                   <div key={item.id} className="p-4 lg:p-6">
-                    <div className="flex space-x-4">
-                      <div className="w-16 h-16 lg:w-20 lg:h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                    <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+                      <div className="w-full sm:w-16 h-32 sm:h-16 lg:w-20 lg:h-20 bg-white rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center mx-auto sm:mx-0">
                         <img
                           src={item.product.image}
                           alt={item.product.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-contain"
                         />
                       </div>
                       
@@ -233,14 +233,14 @@ const CartPage: React.FC<CartPageProps> = ({ onBackToHome }) => {
         {state.wishlist.length > 0 && (
           <div className="mt-8 lg:mt-12">
             <h2 className="text-lg lg:text-xl font-bold text-gray-900 mb-6">Saved for later</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
               {state.wishlist.slice(0, 4).map((item) => (
                 <div key={item.id} className="bg-white rounded-lg p-3 lg:p-4 shadow-sm">
-                  <div className="w-full h-24 lg:h-32 bg-gray-100 rounded mb-3 overflow-hidden">
+                  <div className="w-full h-32 sm:h-24 lg:h-32 bg-white rounded mb-3 overflow-hidden flex items-center justify-center">
                     <img
                       src={item.product.image}
                       alt={item.product.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   </div>
                   <div className="text-base lg:text-lg font-bold text-gray-900 mb-2">
